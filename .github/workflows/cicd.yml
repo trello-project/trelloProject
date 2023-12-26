@@ -40,14 +40,14 @@ jobs:
     - name: gradlew에 실행 권한 부여
       run: chmod +x ./gradlew
 
-# start.sh
-    - name: make start.sh
-      if: contains(github.ref, 'dev')
-      run: |
-        cd .
-        touch ./start.sh
-        echo "${{ secrets.START_SH }}" | base64 --decode > ./start.sh
-      shell: bash
+# # start.sh
+#     - name: make start.sh
+#       if: contains(github.ref, 'dev')
+#       run: |
+#         cd .
+#         touch ./start.sh
+#         echo "${{ secrets.START_SH }}" | base64 --decode > ./start.sh
+#       shell: bash
       
     - name: 프로젝트 빌드
       run: ./gradlew clean build -x test
