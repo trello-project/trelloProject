@@ -1,4 +1,4 @@
-package com.example.trelloproject.Board.DTO;
+package com.example.trelloproject.board.DTO;
 
 import lombok.Getter;
 

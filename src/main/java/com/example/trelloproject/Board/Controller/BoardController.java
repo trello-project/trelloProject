@@ -1,4 +1,4 @@
-package com.example.trelloproject.Board.Controller;
+package com.example.trelloproject.board.Controller;
 
 import org.springframework.web.bind.annotation.RestController;
 

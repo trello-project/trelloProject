@@ -17,14 +17,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     public CommonResponseDTO<?> signup(SignupDTO signupDTO) {
-        userRepository.findByUsername(signupDTO.getUsername()).orElseThrow(
+        userRepository.findByUsername(signupDTO.username()).orElseThrow(
                 ()-> new NotFoundElementException("해당 유저 네임이 존재하지 않습니다.")
         );
-        userRepository.findByEmail(signupDTO.getEmail()).orElseThrow(
+        userRepository.findByEmail(signupDTO.email()).orElseThrow(
                 ()-> new NotFoundElementException("해당 유저의 이메일이 존재하지 않습니다.")
         );
 
-        String bcrytPassowrd = passwordEncoder.encode(signupDTO.getPassword());
+        String bcrytPassowrd = passwordEncoder.encode(signupDTO.password());
         User userEntity = User.builder()
                 .username(signupDTO.username())
                 .password(bcrytPassowrd)
