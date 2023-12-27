@@ -1,6 +1,6 @@
 package com.example.trelloproject.card.Entity;
 
-import com.example.trelloproject.Comment.entity.Comment;
+import com.example.trelloproject.comment.entity.Comment;
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;

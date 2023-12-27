@@ -1,9 +1,9 @@
-package com.example.trelloproject.Board.Repository;
+package com.example.trelloproject.board.repository;
 
-import com.example.trelloproject.Board.Entity.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
+import com.example.trelloproject.board.entity.Board;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 

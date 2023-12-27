@@ -1,6 +1,6 @@
 package com.example.trelloproject.card.Service;
 
-import com.example.trelloproject.Board.Repository.BoardRepository;
+import com.example.trelloproject.board.repository.BoardRepository;
 import com.example.trelloproject.card.DTO.CardDTO;
 import com.example.trelloproject.card.Entity.Card;
 import com.example.trelloproject.card.Repository.CardRepository;

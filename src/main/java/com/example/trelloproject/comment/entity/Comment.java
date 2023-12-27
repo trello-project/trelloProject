@@ -1,4 +1,4 @@
-package com.example.trelloproject.Comment.entity;
+package com.example.trelloproject.comment.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
