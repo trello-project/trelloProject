@@ -14,7 +14,7 @@ on:
 
 env:
   AWS_REGION: ap-northeast-2
-  AWS_S3_BUCKET: trello-s3-bucket
+  AWS_S3_BUCKET: s3://trello-s3-bucket
   AWS_CODE_DEPLOY_APPLICATION: trello-CD
   AWS_CODE_DEPLOY_GROUP: trello-cd-group
 
