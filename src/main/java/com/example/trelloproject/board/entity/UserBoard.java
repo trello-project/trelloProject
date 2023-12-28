@@ -25,4 +25,12 @@ public class UserBoard {
 
     private Boolean isAccepted;
 
+    public void setAccepted(Boolean accepted) {
+        isAccepted = accepted;
+    }
+
+    public UserBoard(Board board, User user) {
+        this.board = board;
+        this.user = user;
+    }
 }

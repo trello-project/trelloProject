@@ -1,5 +1,6 @@
 package com.example.trelloproject.board.entity;
 
+import com.example.trelloproject.global.entity.Timestamped;
 import com.example.trelloproject.user.entity.User;
 import com.example.trelloproject.board.dto.BoardRequestDto;
 import jakarta.persistence.*;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "boards")
-public class Board {
+public class Board extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
