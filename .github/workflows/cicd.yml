@@ -9,9 +9,9 @@ name: CI/CD
 run-name: Running
 on:
   push:
-    branches: [ feat/cicd ]
+    branches: [ dev ]
   pull_request:
-    branches: [ feat/cicd ]
+    branches: [ main ]
 
 env:
   AWS_REGION: ap-northeast-2
