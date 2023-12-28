@@ -53,6 +53,7 @@ jobs:
       - name: application.properties 바꾸기
         run: |
           echo "Current working directory: $(pwd)"
+          ls -al
           echo "Replacing RDS_DB_URL"
           sed -i "s|{{RDS_DB_URL}}|${{ secrets.RDS_DB_URL }}|" ./src/main/resources/application.properties
           echo "Replacing RDS_DB_USERNAME"
