@@ -49,11 +49,15 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.CICD_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.CICD_SECRET_KEY }}
-
-      - name: application properties 바꾸기
+          
+      - name: application.properties 바꾸기
         run: |
+          echo "Current working directory: $(pwd)"
+          echo "Replacing RDS_DB_URL"
           sed -i "s|{{RDS_DB_URL}}|${{ secrets.RDS_DB_URL }}|" ./src/main/resources/application.properties
+          echo "Replacing RDS_DB_USERNAME"
           sed -i "s|{{RDS_DB_USERNAME}}|${{ secrets.RDS_DB_USERNAME }}|" ./src/main/resources/application.properties
+          echo "Replacing RDS_DB_PASSWORD"
           sed -i "s|{{RDS_DB_PASSWORD}}|${{ secrets.RDS_DB_PASSWORD }}|" ./src/main/resources/application.properties
 
       - name: Upload to S3
