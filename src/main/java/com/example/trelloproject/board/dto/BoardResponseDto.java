@@ -1,12 +1,13 @@
 package com.example.trelloproject.board.dto;
 
 import com.example.trelloproject.board.entity.Board;
-import com.example.trelloproject.global.DTO.CommonResponseDTO;
-import com.example.trelloproject.user.Entity.User;
+import com.example.trelloproject.global.dto.CommonResponseDTO;
+import com.example.trelloproject.global.dto.CommonResponseDTO;
+import com.example.trelloproject.user.entity.User;
 import lombok.Getter;
 
 @Getter
-public class BoardResponseDto extends CommonResponseDTO {
+public class BoardResponseDto /*extends CommonResponseDTO*/ {
 
     private String title;
     private String content;
