@@ -53,8 +53,26 @@ jobs:
       - name: Upload to S3
         run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://${{ env.AWS_S3_BUCKET }}/trello/$GITHUB_SHA.zip --source .
 
+      - name: Deploy to EC2 변수 찍어보기
+        run: echo "$env.CODE_DEPLOY_APPLITION" | echo "$env.AWS_CODE_DEPLOY_GROUP" | echo "$env.AWS_S3_BUCKET" 
       - name: Deploy to EC2
         run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=${{ env.AWS_S3_BUCKET }},key=trello/$GITHUB_SHA.zip,bundleType=zip
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## This workflow uses actions that are not certified by GitHub.
 ## They are provided by a third-party and are governed by
