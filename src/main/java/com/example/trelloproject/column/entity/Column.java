@@ -25,7 +25,7 @@ public class Column {
 
     private Long sortOrder;
 
-
+  
     @OneToMany(mappedBy = "column", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Card> cards = new LinkedHashSet<>();
 

@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    Optional<Board> findByUserId(Long userId);
+    Optional<Board> findByUsername(String username);
 }
