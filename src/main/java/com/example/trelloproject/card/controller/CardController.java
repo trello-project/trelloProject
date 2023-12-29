@@ -1,8 +1,8 @@
 package com.example.trelloproject.card.controller;
 
-import com.example.trelloproject.card.dto.CardDTO;
+import com.example.trelloproject.card.dto.CardDto;
 import com.example.trelloproject.card.service.CardServiceImpl;
-import com.example.trelloproject.global.dto.CommonResponseDTO;
+import com.example.trelloproject.global.dto.CommonResponseDto;
 import com.example.trelloproject.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +15,11 @@ public class CardController {
     private final CardServiceImpl cardService;
 
     @GetMapping("/v1/card")
-    public CommonResponseDTO<?> showCard(
-            CardDTO cardDTO,
+    public CommonResponseDto<?> showCard(
+            CardDto cardDto,
             /*@AuthenticationPrincipal UserDetails userDetails*/
             User member){
-        cardService.createCard(cardDTO, member);
-        return new CommonResponseDTO<>();
+        cardService.createCard(cardDto, member);
+        return new CommonResponseDto<>();
     }
 }
