@@ -2,7 +2,7 @@ package com.example.trelloproject.user.dto;
 
 import com.example.trelloproject.user.entity.User;
 import lombok.Builder;
-public record SignupDTO(String username, String password, String email){
+public record SignupDto(String username, String password, String email){
 
     @Builder
     public User toEntity(String username, String password, String email){

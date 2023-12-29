@@ -1,6 +1,6 @@
 package com.example.trelloproject.board.service;
 
-import com.example.trelloproject.board.dto.BoardRequestDTO;
+import com.example.trelloproject.board.dto.BoardRequestDto;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.repository.BoardRepository;
 import com.example.trelloproject.board.repository.UserBoardRepository;
@@ -32,7 +32,7 @@ class BoardServiceTest {
     void createBoard(){
         //given
         User user = User.builder().username("User1").password("12345").build();
-        BoardRequestDTO requestDto = new BoardRequestDTO("첫 보드","보드 테스트");
+        BoardRequestDto requestDto = new BoardRequestDto("첫 보드","보드 테스트");
 
         BoardService boardService = new BoardService(boardRepository,userRepository,userBoardRepository);
 

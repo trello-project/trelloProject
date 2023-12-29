@@ -5,12 +5,12 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommonResponseDTO<T> {
+public class CommonResponseDto<T> {
     private String message;
     private T data;
     private Integer statusCode;
 
-    public CommonResponseDTO(String message, Integer statusCode){
+    public CommonResponseDto(String message, Integer statusCode){
         this.message = message;
         this.statusCode = statusCode;
     }

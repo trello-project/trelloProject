@@ -3,7 +3,7 @@ package com.example.trelloproject.card.dto;
 import lombok.Getter;
 
 @Getter
-public class CardDTO {
+public class CardDto {
 
     private String title;
     private String content;

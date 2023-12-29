@@ -1,6 +1,6 @@
 package com.example.trelloproject.global.exception;
 
-import com.example.trelloproject.global.dto.CommonResponseDTO;
+import com.example.trelloproject.global.dto.CommonResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
