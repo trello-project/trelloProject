@@ -18,7 +18,6 @@ public class GlobalExceptionHandler {
     public CommonResponseDto<?> noSuchElementException(NoSuchElementException e){
         return new CommonResponseDto<>(e.getMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
     }
-
     // not found entity Exception...
     @ExceptionHandler(NotFoundUserException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
