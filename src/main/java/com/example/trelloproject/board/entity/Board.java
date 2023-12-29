@@ -20,12 +20,19 @@ public class Board extends Timestamped {
     @Column (nullable = false)
     private String title;
 
-    @Column
     private String content;
+
+    @Enumerated (EnumType.STRING)
+    private BackgroundColor backgroundColor;
+
+    private enum BackgroundColor{
+        PINK, GREEN, BLUE
+    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "users_id")
     private User user;
+
 
     public void setUser(User user) {
         this.user = user;
