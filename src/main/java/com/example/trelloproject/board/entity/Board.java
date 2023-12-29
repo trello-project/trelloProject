@@ -1,8 +1,8 @@
 package com.example.trelloproject.board.entity;
 
+import com.example.trelloproject.board.dto.BoardRequestDTO;
 import com.example.trelloproject.global.entity.Timestamped;
 import com.example.trelloproject.user.entity.User;
-import com.example.trelloproject.board.dto.BoardRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,7 +43,7 @@ public class Board extends Timestamped {
         this.content = content;
     }
 
-    public void update(BoardRequestDto requestDTO) {
+    public void update(BoardRequestDTO requestDTO) {
         this.title = requestDTO.getTitle();
         this.content = requestDTO.getContent();
     }

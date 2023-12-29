@@ -1,6 +1,6 @@
 package com.example.trelloproject.board.controller;
 
-import com.example.trelloproject.board.dto.BoardRequestDto;
+import com.example.trelloproject.board.dto.BoardRequestDTO;
 import com.example.trelloproject.board.dto.BoardResponseDto;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.service.BoardService;
@@ -9,6 +9,7 @@ import com.example.trelloproject.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,12 +21,10 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    User user = new User("User1", "12345");
-
     //보드 생성
     @PostMapping
-    private ResponseEntity<Board> createBoard(@RequestBody BoardRequestDto requestDto/*,User user*/ /*@AuthenticationPrincipal User user*/) {
-        Board board = boardService.createBoard(requestDto,user);
+    private ResponseEntity<Board> createBoard(@RequestBody BoardRequestDTO requestDto, @AuthenticationPrincipal User user) {
+        Board board = boardService.createBoard(requestDto, user);
         return ResponseEntity.ok().body(board);
     }
 
@@ -45,7 +44,7 @@ public class BoardController {
 
     //보드 수정
     @PutMapping("/{boardId}")
-    private ResponseEntity<CommonResponseDTO<?>> updateBoard(@PathVariable Long boardId, @RequestBody BoardRequestDto requestDto,User user /*@AuthenticationPrincipal User user*/) {
+    private ResponseEntity<CommonResponseDTO<?>> updateBoard(@PathVariable Long boardId, @RequestBody BoardRequestDTO requestDto, User user /*@AuthenticationPrincipal User user*/) {
         CommonResponseDTO<?> responseDto = boardService.updateBoard(boardId, requestDto, user);
         return ResponseEntity.ok().body(responseDto);
     }
@@ -53,7 +52,6 @@ public class BoardController {
     //보드 삭제
     @DeleteMapping("/{boardId}")
     private void deleteBoard(@PathVariable Long boardId, User user/*@AuthenticationPrincipal User user*/) {
-        user = new User("User1","123");
         boardService.deleteBoard(boardId, user);
     }
 

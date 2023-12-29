@@ -1,6 +1,6 @@
 package com.example.trelloproject.board.service;
 
-import com.example.trelloproject.board.dto.BoardRequestDto;
+import com.example.trelloproject.board.dto.BoardRequestDTO;
 import com.example.trelloproject.board.dto.BoardResponseDto;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.entity.UserBoard;
@@ -23,8 +23,7 @@ public class BoardService {
     private final UserRepository userRepository;
     private final UserBoardRepository userBoardRepository;
 
-
-    public Board createBoard(BoardRequestDto requestDTO, User user) {
+    public Board createBoard(BoardRequestDTO requestDTO, User user) {
         Board board = new Board(requestDTO.getTitle(), requestDTO.getContent());
         board.setUser(user);
         boardRepository.save(board);
@@ -42,7 +41,7 @@ public class BoardService {
     }
 
     @Transactional
-    public CommonResponseDTO<?> updateBoard(Long boardId, BoardRequestDto requestDTO, User user) {
+    public CommonResponseDTO<?> updateBoard(Long boardId, BoardRequestDTO requestDTO, User user) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드입니다."));
 
         if (!user.equals(board.getUser())) {

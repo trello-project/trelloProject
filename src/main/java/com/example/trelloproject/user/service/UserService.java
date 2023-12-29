@@ -1,46 +1,35 @@
 package com.example.trelloproject.user.service;
 
-import com.example.trelloproject.global.dto.CommonResponseDTO;
-import com.example.trelloproject.global.exception.NotFoundElementException;
-import com.example.trelloproject.user.dto.LoginDTO;
-import com.example.trelloproject.user.dto.SignupDTO;
+
+import com.example.trelloproject.dto.UpdateProfileRequestDto;
+import com.example.trelloproject.global.refreshToken.RefreshTokenRepository;
+import com.example.trelloproject.user.dto.*;
 import com.example.trelloproject.user.entity.User;
+import com.example.trelloproject.user.entity.UserRoleEnum;
 import com.example.trelloproject.user.repository.UserRepository;
+import com.example.trelloproject.user.util.UserValidUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
+import java.util.Optional;
+
 @Service
+@RequiredArgsConstructor
 public class UserService {
-
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    public CommonResponseDTO<?> signup(SignupDTO signupDTO) {
-        userRepository.findByUsername(signupDTO.username()).orElseThrow(
-                ()-> new NotFoundElementException("해당 유저 네임이 존재하지 않습니다.")
-        );
-        userRepository.findByEmail(signupDTO.email()).orElseThrow(
-                ()-> new NotFoundElementException("해당 유저의 이메일이 존재하지 않습니다.")
-        );
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final UserValidUtil userValidUtil;
 
-        String bcrytPassowrd = passwordEncoder.encode(signupDTO.password());
-        User userEntity = User.builder()
-                .username(signupDTO.username())
-                .password(bcrytPassowrd)
-                .email(signupDTO.email())
-                .build();
-
-        userRepository.save(userEntity);
-        return new CommonResponseDTO<>("회원 가입에 성공하셨습니다.", 200);
+    public UserResponseDto getInfo(User user) {
+        return new UserResponseDto(user);
     }
+    public UserResponseDto signup(UserSignupDto requestDto) {
 
-    public CommonResponseDTO<?> login(LoginDTO loginDTO) {
-        // security 처리를 할지? 안할지?
-        userRepository.findByUsername(loginDTO.getUsername()).orElseThrow();
+        User user = userValidUtil.getValidNewUserByRequestDto(requestDto);
+        user.changeRole(UserRoleEnum.USER);
 
-        return new CommonResponseDTO<>("로그인에 성공하셨습니다.", 200);
+        // 사용자 등록
+        userRepository.save(user);
+        return new UserResponseDto(user);
     }
-
-    // userinfo?
 }
