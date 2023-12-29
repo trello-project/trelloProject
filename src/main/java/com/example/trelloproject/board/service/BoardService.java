@@ -1,19 +1,17 @@
 package com.example.trelloproject.board.service;
 
+import com.example.trelloproject.board.dto.BoardRequestDto;
+import com.example.trelloproject.board.dto.BoardResponseDto;
+import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.entity.UserBoard;
 import com.example.trelloproject.board.repository.BoardRepository;
-import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.repository.UserBoardRepository;
 import com.example.trelloproject.global.dto.CommonResponseDTO;
-import com.example.trelloproject.global.exception.NotFoundElementException;
 import com.example.trelloproject.user.entity.User;
 import com.example.trelloproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.example.trelloproject.board.dto.BoardRequestDto;
-import com.example.trelloproject.board.dto.BoardResponseDto;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -26,19 +24,17 @@ public class BoardService {
     private final UserRepository userRepository;
     private final UserBoardRepository userBoardRepository;
 
-    public CommonResponseDTO<?> createBoard(BoardRequestDto requestDTO, User user) {
+
+    public Board createBoard(BoardRequestDto requestDTO, User user) {
         Board board = new Board(requestDTO.getTitle(), requestDTO.getContent());
         board.setUser(user);
         boardRepository.save(board);
-        return new CommonResponseDTO<>("message",board, HttpStatus.OK.value());
+        return board;
     }
 
-    public CommonResponseDTO<?> getBoard(Long boardId) {
+    public Board getBoard(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드 입니다."));
-        /*CommonResponseDTO<?> responseDTO = BoardResponseDto(board);*/
-        return new CommonResponseDTO<>("message",board, HttpStatus.OK.value());
-
-
+        return board;
     }
 
     public List<Board> getAllBoards() {
@@ -56,12 +52,12 @@ public class BoardService {
 
         board.update(requestDTO);
         boardRepository.save(board);
-        return new  CommonResponseDTO<>("message", board, HttpStatus.OK.value());
+        return new CommonResponseDTO<>("message", board, HttpStatus.OK.value());
 
 
     }
 
-    public void deletBoard(Long boardId, User user) {
+    public void deleteBoard(Long boardId, User user) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드입니다."));
 
         if (!user.equals(board.getUser())) {
@@ -70,12 +66,12 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
-    public CommonResponseDTO<?> inviteUserToBoard(Long boardId, Long userId) {
+    public BoardResponseDto inviteUserToBoard(Long boardId, Long userId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드입니다."));
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
         UserBoard userBoard = new UserBoard(board, user);
         userBoardRepository.save(userBoard);
-        return new CommonResponseDTO<>("response",userBoard,HttpStatus.OK.value());
+        return new BoardResponseDto(board);
     }
 }

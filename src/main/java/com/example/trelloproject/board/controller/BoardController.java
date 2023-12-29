@@ -1,6 +1,7 @@
 package com.example.trelloproject.board.controller;
 
 import com.example.trelloproject.board.dto.BoardRequestDto;
+import com.example.trelloproject.board.dto.BoardResponseDto;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.service.BoardService;
 import com.example.trelloproject.global.dto.CommonResponseDTO;
@@ -19,19 +20,20 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    User user = new User("User1", "12345");
 
     //보드 생성
     @PostMapping
-    private ResponseEntity<CommonResponseDTO<?>> createBoard(@RequestBody BoardRequestDto requestDto,User user /*@AuthenticationPrincipal User user*/) {
-        CommonResponseDTO<?> responseDto = boardService.createBoard(requestDto, user);
-        return ResponseEntity.ok().body(responseDto);
+    private ResponseEntity<Board> createBoard(@RequestBody BoardRequestDto requestDto/*,User user*/ /*@AuthenticationPrincipal User user*/) {
+        Board board = boardService.createBoard(requestDto,user);
+        return ResponseEntity.ok().body(board);
     }
 
     //보드 단건 조회
     @GetMapping("/{boardId}")
-    private ResponseEntity<CommonResponseDTO<?>> getBoard(@PathVariable Long boardId) {
-        CommonResponseDTO<?> responseDto = boardService.getBoard(boardId);
-        return ResponseEntity.ok().body(responseDto);
+    private ResponseEntity<Board> getBoard(@PathVariable Long boardId) {
+        Board board = boardService.getBoard(boardId);
+        return ResponseEntity.ok().body(board);
     }
 
     //보드 전체 조회
@@ -52,14 +54,15 @@ public class BoardController {
     @DeleteMapping("/{boardId}")
     private void deleteBoard(@PathVariable Long boardId, User user/*@AuthenticationPrincipal User user*/) {
         user = new User("User1","123");
-        boardService.deletBoard(boardId, user);
+        boardService.deleteBoard(boardId, user);
     }
 
     //보드 초대
     @PostMapping("/{boardId}") ///{boardId}?user={userId}
-    private ResponseEntity<CommonResponseDTO<?>> inviteUserToBoard(@PathVariable Long boardId, @RequestParam("user") Long userId) {
-        CommonResponseDTO<?> responseDTO = boardService.inviteUserToBoard(boardId, userId);
+    private ResponseEntity<BoardResponseDto> inviteUserToBoard(@PathVariable Long boardId, @RequestParam("user") Long userId) {
+        BoardResponseDto responseDTO = boardService.inviteUserToBoard(boardId, userId);
         return ResponseEntity.ok().body(responseDTO);
     }
+
 
 }

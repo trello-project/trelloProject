@@ -1,11 +1,11 @@
 package com.example.trelloproject.board.repository;
 
 import com.example.trelloproject.board.entity.Board;
+import com.example.trelloproject.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
-
-    Optional<Board> findByUserId(Long userId);
+    Optional<Object> findByUser(User user);
 }
