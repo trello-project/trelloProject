@@ -1,4 +1,4 @@
-package com.example.trelloproject.Global.DTO;
+package com.example.trelloproject.global.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

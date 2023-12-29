@@ -1,9 +1,10 @@
-package com.example.trelloproject.Comment.Entity;
+package com.example.trelloproject.comment.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
 
 @Entity
 public class Comment {
@@ -13,4 +14,16 @@ public class Comment {
     private Long id;
 
     private String content;
+
+    private String writer;
+
+    @Builder
+    public Comment(String content, String writer){
+        this.content = content;
+        this.writer = writer;
+    }
+
+    public void modify(String content){
+        this.content = content;
+    }
 }
