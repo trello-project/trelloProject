@@ -12,8 +12,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
+@Builder
+@Table(name = "users")
 public class User {
 
     @Id
@@ -27,4 +28,8 @@ public class User {
     private String email;
 
     private String introduction;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

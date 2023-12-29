@@ -1,6 +1,5 @@
 package com.example.trelloproject.board.repository;
 
-
 import com.example.trelloproject.board.entity.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 

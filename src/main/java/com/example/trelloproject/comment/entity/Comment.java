@@ -1,11 +1,10 @@
-package com.example.trelloproject.comment.entity;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+package com.examp
+import com.example.trelloproject.card.entity.Card;
+import com.example.trelloproject.user.entity.User;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "Comments")
 public class Comment {
 
     @Id
@@ -13,4 +12,13 @@ public class Comment {
     private Long id;
 
     private String content;
+
+
+    @ManyToOne
+    @JoinColumn(name = "cards_id")
+    private Card card;
+
+    @ManyToOne
+    @JoinColumn(name = "users_id")
+    private User user;
 }

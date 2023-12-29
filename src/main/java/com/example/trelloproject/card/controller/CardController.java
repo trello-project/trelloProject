@@ -1,9 +1,9 @@
-package com.example.trelloproject.Card.Controller;
+package com.example.trelloproject.card.controller;
 
-import com.example.trelloproject.Card.DTO.CardDTO;
-import com.example.trelloproject.Card.Service.CardServiceImpl;
-import com.example.trelloproject.Global.DTO.CommonResponseDTO;
-import com.example.trelloproject.User.Entity.User;
+import com.example.trelloproject.card.dto.CardDTO;
+import com.example.trelloproject.card.service.CardServiceImpl;
+import com.example.trelloproject.global.dto.CommonResponseDTO;
+import com.example.trelloproject.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
