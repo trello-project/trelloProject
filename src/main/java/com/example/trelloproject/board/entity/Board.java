@@ -27,6 +27,8 @@ public class Board extends Timestamped {
     @JoinColumn(name = "users_id")
     private User user;
 
+
+
     public void setUser(User user) {
         this.user = user;
     }

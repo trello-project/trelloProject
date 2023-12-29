@@ -1,58 +1,79 @@
 package com.example.trelloproject.global.security;
 
-import com.example.trelloproject.jwt.JwtUtil;
+
+import com.example.trelloproject.global.entity.RefreshToken;
+import com.example.trelloproject.global.exception.TokenNotExistException;
+import com.example.trelloproject.global.refreshToken.RefreshTokenService;
+import com.example.trelloproject.user.entity.User;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.lang.Strings;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.io.IOException;
+
 @Slf4j(topic = "JWT 검증 및 인가")
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final RedisRepository redisRepository;
+
     private final UserDetailsServiceImpl userDetailsService;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = jwtUtil.resolveToken(request, jwtUtil.ACCESS_TOKEN_HEADER);
-        String refreshToken = jwtUtil.resolveToken(request, jwtUtil.REFRESH_TOKEN_HEADER);
+    private final RefreshTokenService refreshTokenService;
 
-        //1. Access Token 존재?
-        if(StringUtils.hasText(accessToken) && !redisRepository.hasBlackList(accessToken)) {
-            //1-1. Access Token 유효?
-            if(jwtUtil.validateToken(accessToken)) {
-                Claims info = jwtUtil.getUserInfoFromToken(accessToken);
-                String username = info.getSubject();
-                setAuthentication(username);
-            } else {
-                //2. Refresh Token 존재?
-                if (Strings.hasText(refreshToken)) {
-                    //2-1. Refresh Token 유효 && Redis에 존재?
-                    if (jwtUtil.validateToken(refreshToken) && redisRepository.hasRefreshToken(refreshToken)) {
-                        //Reissue Access Token && add Header
-                        Claims info = jwtUtil.getUserInfoFromToken(refreshToken);
-                        String username = info.getSubject();
-                        String newToken = jwtUtil.createAccessToken(username, jwtUtil.getUserRole(info));
-                        response.setHeader(jwtUtil.ACCESS_TOKEN_HEADER, newToken);
-                        response.setHeader(jwtUtil.REFRESH_TOKEN_HEADER, jwtUtil.BEARER_PREFIX + refreshToken);
-                        setAuthentication(username);
-                    }
+    @Override
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
+
+        String accessTokenValue = jwtUtil.getJwtFromHeader(req);
+        String refreshTokenValue = req.getHeader(jwtUtil.REFRESH_TOKEN_HEADER);
+
+        try {
+            if (StringUtils.hasText(accessTokenValue)) {
+                // JWT 토큰
+                if (jwtUtil.validateToken(accessTokenValue)) {
+                    Claims info = jwtUtil.getUserInfoFromToken(accessTokenValue);
+
+                    setAuthentication(info.getSubject());
+                } else if (StringUtils.hasText(refreshTokenValue)) {
+                    RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenValue).orElseThrow(
+                            () -> new TokenNotExistException("토큰 정보가 없습니다.")
+                    );
+
+                    //TODO Access 토큰과 비교해 부정한 사용자인지 확인하면 더 좋을듯
+
+                    //유효 검사
+                    refreshToken = refreshTokenService.verifyExpiration(refreshToken);
+
+                    // 유효하면 JWT 토큰 재발급
+                    User user = refreshToken.getUser();
+                    String accessToken = jwtUtil.createToken(user.getUsername(), user.getRole());
+                    res.addHeader(JwtUtil.ACCESS_TOKEN_HEADER, accessToken);
+
+                    setAuthentication(user.getUsername());
                 }
             }
+        } catch (TokenNotExistException e) {
+            res.setContentType("application/json; charset=UTF-8");
+            res.setStatus(HttpStatus.UNAUTHORIZED.value());
+            res.getWriter().write(e.getMessage());
+            return;
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
-        filterChain.doFilter(request, response);
+
+        filterChain.doFilter(req, res);
     }
 
     public void setAuthentication(String username) {

@@ -1,40 +1,41 @@
 package com.example.trelloproject.global.config;
 
-import com.example.trelloproject.global.redis.RedisRepository;
-import com.example.trelloproject.global.security.JwtAccessDeniedHandler;
+import com.example.trelloproject.global.security.UserDetailsServiceImpl;
+import com.example.trelloproject.global.security.JwtUtil;
+import com.example.trelloproject.global.refreshToken.RefreshTokenService;
 import com.example.trelloproject.global.security.JwtAuthenticationFilter;
-import com.example.trelloproject.jwt.JwtAuthorizationFilter;
-import com.example.trelloproject.jwt.JwtUtil;
-import com.example.trelloproject.user.service.UserDetailsService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.trelloproject.global.security.JwtAuthorizationFilter;
+import com.example.trelloproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
-    private final ObjectMapper objectMapper;
-    private final RedisRepository redisRepository;
+
     private final UserDetailsServiceImpl userDetailsService;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
     private final AuthenticationConfiguration authenticationConfiguration;
+
+    private final UserRepository userRepository;
+
+    private final RefreshTokenService refreshTokenService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -48,34 +49,49 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, objectMapper, redisRepository);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, userRepository, refreshTokenService);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         return filter;
     }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtUtil, redisRepository, userDetailsService);
+        return new JwtAuthorizationFilter(jwtUtil, userDetailsService, refreshTokenService);
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable);
+        http.csrf((csrf) -> csrf.disable());
 
-        http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        http.exceptionHandling(handler -> handler.accessDeniedHandler(jwtAccessDeniedHandler));
-
-        http.authorizeHttpRequests(authz -> authz
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-//                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .requestMatchers("/api/users/signup").permitAll()
-                .anyRequest().authenticated()
+        http.sessionManagement((sessionManagement) ->
+                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
+
+        http.exceptionHandling(
+                (exception) ->
+                        exception
+                                .authenticationEntryPoint(authenticationEntryPoint()) // 토큰인증 실패시
+                                .accessDeniedPage("/error/403") // 권한없는 페이지 접근 시 (admin)
+        );
+
+        http.authorizeHttpRequests((authorizeHttpRequests) ->
+                authorizeHttpRequests
+                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()// resources 접근 허용 설정
+                        .requestMatchers("/", "/error/**").permitAll() // 메인페이지, error 페이지 접근 허용
+//                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                    .requestMatchers("/v1/users/signup", "/v1/users/login").permitAll() // 회원가입, 로그인 페이지 접근 허용
+                    .anyRequest().authenticated()
+        );
+
 
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint(){
+        return new CustomAuthenticationEntryPoint();
     }
 }

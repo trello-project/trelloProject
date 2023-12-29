@@ -51,7 +51,6 @@ public class BoardController {
     //보드 삭제
     @DeleteMapping("/{boardId}")
     private void deleteBoard(@PathVariable Long boardId, User user/*@AuthenticationPrincipal User user*/) {
-        user = new User("User1","123");
         boardService.deletBoard(boardId, user);
     }
 
