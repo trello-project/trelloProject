@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CommonResponseDto<T> {
 
-
-
     private String message;
 
     private T data;
