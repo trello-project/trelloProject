@@ -1,3 +1,24 @@
+#version: 0.0
+#os: linux
+#
+#files:
+#  - source:  /
+#    destination: /home/ubuntu/app/trello-project
+#    overwrite: yes
+#
+#permissions:
+#  - object: /
+#    owner: ubuntu
+#    group: ubuntu
+#
+#hooks:
+#  AfterInstall:
+#    - location: scripts/stop.sh
+#      timeout: 60
+#  ApplicationStart:
+#    - location: scripts/start.sh
+#      timeout: 60
+
 version: 0.0
 os: linux
 # S3에 있는 zip 파일이 EC2에 배포될 위치를 지정
@@ -17,8 +38,7 @@ hooks:
   AfterInstall:
     - location: stop.sh
       timeout: 60
-      runas : ubuntu
+
   ApplicationStart:
     - location: start.sh
       timeout: 60
-      runas : ubuntu
