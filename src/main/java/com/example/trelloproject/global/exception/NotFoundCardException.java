@@ -3,9 +3,9 @@ package com.example.trelloproject.global.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class NotFoundElementException extends RuntimeException{
-    public NotFoundElementException(String message){
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class NotFoundCardException extends RuntimeException{
+    public NotFoundCardException(String message){
         super(message);
     }
 }

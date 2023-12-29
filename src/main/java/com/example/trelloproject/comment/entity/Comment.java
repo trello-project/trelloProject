@@ -1,5 +1,4 @@
-package com.example.trelloproject.comment.entity;
-
+package com.examp
 import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.user.entity.User;
 import jakarta.persistence.*;

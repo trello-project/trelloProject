@@ -64,5 +64,4 @@ public class BoardController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
-
 }
