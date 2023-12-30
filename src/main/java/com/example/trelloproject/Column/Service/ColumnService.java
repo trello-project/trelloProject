@@ -1,6 +1,6 @@
 package com.example.trelloproject.column.service;
 
-import com.example.trelloproject.Board.Entity.Board;
+import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.repository.BoardRepository;
 import com.example.trelloproject.column.dto.ColumnRequestDto;
 import com.example.trelloproject.column.entity.Column;
@@ -110,7 +110,7 @@ public class ColumnService {
     }
 
     // 게시글 찾는 메서드
-    private com.example.trelloproject.Board.Entity.Board findBoard(Long boardsId){
+    private Board findBoard(Long boardsId){
         // 보드 찾기
         com.example.trelloproject.Board.Entity.Board board = boardRepository.findById(boardsId).orElseThrow(
                 () -> new NotFoundBoardException("해당 보드가 존재하지 않습니다.")
