@@ -1,4 +1,4 @@
-package com.example.trelloproject.Global.Config;
+package com.example.trelloproject.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

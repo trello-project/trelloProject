@@ -1,4 +1,4 @@
-package com.example.trelloproject.Global.Entity;
+package com.example.trelloproject.global.entity;
 
 import java.time.LocalDateTime;
 

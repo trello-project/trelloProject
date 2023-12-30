@@ -1,9 +1,9 @@
-package com.example.trelloproject.User.DTO;
+package com.example.trelloproject.user.dto;
 
 import lombok.Getter;
 
 @Getter
-public class LoginDTO {
+public class LoginDto {
     private String username;
     private String password;
 }
