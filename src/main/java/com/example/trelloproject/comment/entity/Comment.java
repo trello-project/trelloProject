@@ -1,11 +1,18 @@
 package com.example.trelloproject.comment.entity;
 
-import com.example.trelloproject.card.entity.Card;
-import com.example.trelloproject.user.entity.User;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "Comments")
 public class Comment {
 
     @Id
@@ -14,12 +21,15 @@ public class Comment {
 
     private String content;
 
+    private String writer;
 
-    @ManyToOne
-    @JoinColumn(name = "cards_id")
-    private Card card;
+    @Builder
+    public Comment(String content, String writer){
+        this.content = content;
+        this.writer = writer;
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "users_id")
-    private User user;
+    public void modify(String content){
+        this.content = content;
+    }
 }
