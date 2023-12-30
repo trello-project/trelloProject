@@ -1,6 +1,9 @@
 package com.example.trelloproject.card.controller;
 
+import com.example.trelloproject.card.dto.CardBackgroundColorModifyDto;
+import com.example.trelloproject.card.dto.CardContentModifyDto;
 import com.example.trelloproject.card.dto.CardRequestDto;
+import com.example.trelloproject.card.dto.CardTitleModifyDto;
 import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.card.service.CardService;
 import com.example.trelloproject.global.security.UserDetailsImpl;
@@ -47,31 +50,31 @@ public class CardController {
 
     @PatchMapping("/{listsId}/cards/{cardsId}/cardTitle")
     public ResponseEntity<Card> modifyCardTitle(
-            @RequestBody CardRequestDto cardDto,
+            @RequestBody CardTitleModifyDto cardTitleModifyDto,
             @PathVariable Long listsId,
             @PathVariable Long cardsId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
-        Card card = cardService.modifyCardTitle(listsId, cardsId, cardDto, userDetails.getUser());
+        Card card = cardService.modifyCardTitle(listsId, cardsId, cardTitleModifyDto, userDetails.getUser());
         return ResponseEntity.ok().body(card);
     }
 
     @PatchMapping("/{listsId}/cards/{cardsId}/cardContent")
     public ResponseEntity<Card> modifyCardContent(
-            @RequestBody CardRequestDto cardDto,
+            @RequestBody CardContentModifyDto cardContentModifyDto,
             @PathVariable Long listsId,
             @PathVariable Long cardsId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
-        Card card = cardService.modifyCardContent(listsId, cardsId, cardDto, userDetails.getUser());
+        Card card = cardService.modifyCardContent(listsId, cardsId, cardContentModifyDto, userDetails.getUser());
         return ResponseEntity.ok().body(card);
     }
 
     @PatchMapping("/{listsId}/cards/{cardsId}/cardColor")
     public ResponseEntity<Card> modifyCardColor(
-            @RequestBody CardRequestDto cardDto,
+            @RequestBody CardBackgroundColorModifyDto cardBackgroundColorModifyDto,
             @PathVariable Long listsId,
             @PathVariable Long cardsId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
-        cardService.modifyCardColor(listsId, cardsId, cardDto, userDetails.getUser());
+        cardService.modifyCardColor(listsId, cardsId, cardBackgroundColorModifyDto, userDetails.getUser());
         return ResponseEntity.noContent().build();
     }
 

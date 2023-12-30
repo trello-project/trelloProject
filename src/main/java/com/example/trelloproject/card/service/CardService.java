@@ -2,7 +2,9 @@ package com.example.trelloproject.card.service;
 
 import com.example.trelloproject.board.repository.UserBoardRepository;
 import com.example.trelloproject.card.dto.CardBackgroundColorModifyDto;
+import com.example.trelloproject.card.dto.CardContentModifyDto;
 import com.example.trelloproject.card.dto.CardRequestDto;
+import com.example.trelloproject.card.dto.CardTitleModifyDto;
 import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.card.repository.CardRepository;
 import com.example.trelloproject.column.entity.Column;
@@ -72,27 +74,40 @@ public class CardService{
 
     // 카드 부분 수정
     @Transactional
-    public Card modifyCardTitle(Long columnId, Long cardsId, CardRequestDto cardDTO, User loginUser) {
+    public Card modifyCardTitle(Long columnId, Long cardsId, CardTitleModifyDto cardTitleModifyDto, User loginUser) {
         // 카드 찾기
         Card card = findCard(cardsId);
         // 카드 소유자 찾기
         checkCardOwnership(card, loginUser);
 
-        card.modifyCardTitle(cardDTO);
+        card.modifyCardTitle(cardTitleModifyDto);
         return card;
     }
 
     // 카드 내용 수정
     @Transactional
-    public Card modifyCardContent(Long columnId, Long cardsId, CardRequestDto cardDTO, User loginUser) {
+    public Card modifyCardContent(Long columnId, Long cardsId, CardContentModifyDto cardContentModifyDto, User loginUser) {
         // 카드 찾기
         Card card = findCard(cardsId);
         // 카드 소유자 찾기
         checkCardOwnership(card, loginUser);
 
-        card.modifyCardContent(cardDTO);
+        card.modifyCardContent(cardContentModifyDto);
         cardRepository.save(card);
         return card;
+    }
+
+    // 해당 CardColor
+    public void modifyCardColor(
+            Long listsId,
+            Long cardsId,
+            CardBackgroundColorModifyDto cardBackgroundColorModifyDto,
+            User loginUser) {
+        Card card = findCard(cardsId);
+        checkCardOwnership(card, loginUser);
+
+        card.changeCardColor(cardBackgroundColorModifyDto);
+        cardRepository.save(card);
     }
 
     // 카드 협업자 추가
@@ -116,19 +131,6 @@ public class CardService{
     // 카드 협업자 추가 취소
     public void revokeAssignee(Long listsId, Long cardsId, User user) {
 
-    }
-
-    // 해당 CardColor
-    public void modifyCardColor(
-            Long listsId,
-            Long cardsId,
-            CardBackgroundColorModifyDto cardBackgroundColorModifyDto,
-            User loginUser) {
-        Card card = findCard(cardsId);
-        checkCardOwnership(card, loginUser);
-
-        card.changeCardColor(cardBackgroundColorModifyDto);
-        cardRepository.save(card);
     }
 
     private Column findColumn(Long columnId){

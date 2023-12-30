@@ -1,7 +1,9 @@
 package com.example.trelloproject.card.entity;
 
 import com.example.trelloproject.card.dto.CardBackgroundColorModifyDto;
+import com.example.trelloproject.card.dto.CardContentModifyDto;
 import com.example.trelloproject.card.dto.CardRequestDto;
+import com.example.trelloproject.card.dto.CardTitleModifyDto;
 import com.example.trelloproject.comment.entity.Comment;
 import com.example.trelloproject.user.entity.User;
 import jakarta.persistence.*;
@@ -55,12 +57,12 @@ public class Card{
         comments.add(comment);
     }
 
-    public void modifyCardTitle(CardRequestDto cardDto){
-        this.title = cardDto.getTitle();
+    public void modifyCardTitle(CardTitleModifyDto cardTitleModifyDto){
+        this.title = cardTitleModifyDto.getTitle();
     }
 
-    public void modifyCardContent(CardRequestDto cardDto){
-        this.content = cardDto.getContent();
+    public void modifyCardContent(CardContentModifyDto cardContentModifyDto){
+        this.content = cardContentModifyDto.getContent();
     }
 
     public void addAssignee(User user){
