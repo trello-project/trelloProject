@@ -1,4 +1,4 @@
-package com.example.trelloproject.Card.Entity;
+package com.example.trelloproject.card.entity;
 
 public enum CardBackgroundColor {
     RED(Color.RED), GREEN(Color.GREEN), BLUE(Color.BLUE);

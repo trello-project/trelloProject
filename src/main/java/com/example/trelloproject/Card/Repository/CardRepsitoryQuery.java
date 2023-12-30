@@ -1,4 +1,4 @@
-package com.example.trelloproject.Card.Repository;
+package com.example.trelloproject.card.repository;
 
 public interface CardRepsitoryQuery {
 }

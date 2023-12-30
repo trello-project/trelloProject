@@ -1,6 +1,8 @@
-package com.example.trelloproject.Card.Entity;
+package com.example.trelloproject.card.entity;
 
-import com.example.trelloproject.Comment.Entity.Comment;
+import com.example.trelloproject.card.dto.CardDto;
+import com.example.trelloproject.comment.entity.Comment;
+import com.example.trelloproject.global.entity.BaseEntity;
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
@@ -8,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ import java.util.Set;
 
 // Entity
 @Entity
-public class Card {
+public class Card extends BaseEntity {
 
     // field
     @Id
@@ -27,8 +28,6 @@ public class Card {
     private String title;
     private String content;
     private String writer;
-    private LocalDateTime dueDate;
-    private boolean complete;
 
     // relation
     @Column(nullable = false)
@@ -46,5 +45,20 @@ public class Card {
         this.title = title;
         this.content = content;
         this.writer = writer;
+    }
+    public void addComment(Comment comment){
+        comments.add(comment);
+    }
+
+    public void modifyCardTitle(CardDto cardDto){
+        this.title = cardDto.getTitle();
+    }
+
+    public void changeCardColor(){
+
+    }
+
+    public void addAssignee(){
+
     }
 }
