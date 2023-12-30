@@ -1,12 +1,11 @@
 package com.example.trelloproject.Board.Entity;
 
-import com.pjh.trello.Column.Entity.Column;
-import com.pjh.trello.Member.Entity.Member;
+import com.example.trelloproject.column.entity.Column;
+import com.example.trelloproject.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Columns;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -26,9 +25,13 @@ public class Board {
     private String content;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    //@OneToMany(mappedBy = "board")
-    //private Set<Column> columns = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "board")
+    private Set<Column> columns = new LinkedHashSet<>();
+
+    public void addColumn(Column column){
+        columns.add(column);
+    }
 }

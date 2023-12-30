@@ -5,7 +5,6 @@ import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.card.repository.CardRepository;
 import com.example.trelloproject.column.entity.Column;
 import com.example.trelloproject.column.repository.ColumnRepository;
-import com.example.trelloproject.global.exception.*;
 import com.example.trelloproject.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -97,19 +96,19 @@ public class CardService{
 
     private Card findCard(long cardsId){
         return cardRepository.findById(cardsId).orElseThrow(
-                ()-> new NotFoundElementException("해당 카드는 존재하지 않습니다.")
+                ()-> new com.example.trelloproject.Global.Exception.NotFoundElementException("해당 카드는 존재하지 않습니다.")
         );
     }
 
     private Column findColumn(Long columnId){
         return columnRepository.findById(columnId).orElseThrow(
-                ()-> new NotFoundElementException("해당 컬럼은 존재하지 않습니다.")
+                ()-> new com.example.trelloproject.Global.Exception.NotFoundElementException("해당 컬럼은 존재하지 않습니다.")
         );
     }
 
     private void checkCardOwnership(Card card, User loginUser) {
         if (!card.getWriter().equals(loginUser.getUsername())) {
-            throw new UnauthorizedAccessException("해당 사용자는 카드를 삭제할 권한이 없습니다.");
+            throw new com.example.trelloproject.global.exception.UnauthorizedAccessException("해당 사용자는 카드를 삭제할 권한이 없습니다.");
         }
     }
 }
