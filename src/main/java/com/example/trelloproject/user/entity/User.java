@@ -1,6 +1,5 @@
 package com.example.trelloproject.user.entity;
 
-
 import com.example.trelloproject.dto.UpdateProfileRequestDto;
 import com.example.trelloproject.global.util.StringListConverter;
 import jakarta.persistence.*;

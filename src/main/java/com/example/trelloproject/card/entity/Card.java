@@ -1,7 +1,9 @@
 package com.example.trelloproject.card.entity;
 
-import com.example.trelloproject.card.dto.CardDto;
+import com.example.trelloproject.card.dto.CardBackgroundColorModifyDto;
+import com.example.trelloproject.card.dto.CardRequestDto;
 import com.example.trelloproject.comment.entity.Comment;
+import com.example.trelloproject.user.entity.User;
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
@@ -29,6 +31,7 @@ public class Card{
     private String writer;
 
     // relation
+    // 헤당 빽그라운드 컬러에 대해서 조금 생각 해보기
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private CardBackgroundColor backgroundColor;
@@ -37,6 +40,9 @@ public class Card{
     // comment쪽에서는 몰라도 됨
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UsersCards> assignees = new LinkedHashSet<>();
 
     // constructor
     @Builder
@@ -49,15 +55,24 @@ public class Card{
         comments.add(comment);
     }
 
-    public void modifyCardTitle(CardDto cardDto){
+    public void modifyCardTitle(CardRequestDto cardDto){
         this.title = cardDto.getTitle();
     }
 
-    public void changeCardColor(){
-
+    public void modifyCardContent(CardRequestDto cardDto){
+        this.content = cardDto.getContent();
     }
 
-    public void addAssignee(){
+    public void addAssignee(User user){
+        UsersCards usersCards = new UsersCards(user, this);
+        assignees.add(usersCards);
+    }
 
+    public void removeAssignee(User user) {
+        assignees.removeIf(usersCards -> usersCards.getUser().equals(user));
+    }
+
+    public void changeCardColor(CardBackgroundColorModifyDto requestDto){
+        this.backgroundColor = requestDto.getBackgroundColor();
     }
 }

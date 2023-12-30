@@ -2,12 +2,13 @@ package com.example.trelloproject.board.entity;
 
 import com.example.trelloproject.board.dto.BoardRequestDto;
 import com.example.trelloproject.global.entity.Timestamped;
-import com.example.trelloproject.column.entity.Column;
 import com.example.trelloproject.user.entity.User;
+import com.example.trelloproject.column.entity.Column;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ public class Board extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private String title;
 
     private String content;
@@ -33,12 +34,17 @@ public class Board extends Timestamped {
         PINK, GREEN, BLUE
     }
 
+    // 이거 중간 테이블 아님???
+    // 일단 냅둬
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "users_id")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Column> columns = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "board")
+    private Set<UserBoard> invitedUsers = new LinkedHashSet<>();
 
     public void setUser(User user) {
         this.user = user;
@@ -56,5 +62,18 @@ public class Board extends Timestamped {
 
     public void addColumn(Column column){
         columns.add(column);
+    }
+
+    // 임시 테스트 메서드
+    public Set<UserBoard> getInvitedUsers() {
+        return invitedUsers;
+    }
+
+    public void addInvitedUser(UserBoard userBoard) {
+        invitedUsers.add(userBoard);
+    }
+
+    public void removeInvitedUser(UserBoard userBoard) {
+        invitedUsers.remove(userBoard);
     }
 }
