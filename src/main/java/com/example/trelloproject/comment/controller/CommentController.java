@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RequestMapping("/v1/cards")
 @RequiredArgsConstructor
@@ -22,7 +25,14 @@ public class CommentController {
             CommentRequestDto commentRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         Comment newComment = commentService.addComment(commentRequestDto, cardsId, userDetails.getUser());
-        return ResponseEntity.ok().body(newComment);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
+                .pathSegment("{id}")
+                .buildAndExpand(newComment.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(newComment);
     }
 
     @PutMapping("/{cardsId}/comment/{commentId}")
