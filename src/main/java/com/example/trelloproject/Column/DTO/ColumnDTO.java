@@ -1,7 +1,5 @@
-package com.example.trelloproject.Column.DTO;
+package com.example.trelloproject.column.dto;
 
-public class ColumnDTO {
-
+public class ColumnDto {
     private String title;
-
 }

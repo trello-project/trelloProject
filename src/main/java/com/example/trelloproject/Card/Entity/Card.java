@@ -2,7 +2,6 @@ package com.example.trelloproject.card.entity;
 
 import com.example.trelloproject.card.dto.CardDto;
 import com.example.trelloproject.comment.entity.Comment;
-import com.example.trelloproject.global.entity.BaseEntity;
 import jakarta.persistence.*;
 
 import lombok.AccessLevel;
@@ -18,7 +17,7 @@ import java.util.Set;
 
 // Entity
 @Entity
-public class Card extends BaseEntity {
+public class Card{
 
     // field
     @Id
