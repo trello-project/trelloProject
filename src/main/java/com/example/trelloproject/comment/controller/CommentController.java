@@ -1,11 +1,12 @@
 package com.example.trelloproject.comment.controller;
 
-import com.example.trelloproject.comment.dto.CommentDto;
+import com.example.trelloproject.comment.dto.CommentRequestDto;
 import com.example.trelloproject.comment.entity.Comment;
 import com.example.trelloproject.comment.service.CommentService;
-import com.example.trelloproject.user.entity.User;
+import com.example.trelloproject.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/v1/cards")
@@ -18,19 +19,19 @@ public class CommentController {
     @PostMapping("/{cardsId}/comment")
     public ResponseEntity<Comment> addComment(
             @PathVariable Long cardsId,
-            CommentDto commentDTO,
-            User user){
-        Comment newComment = commentService.addComment(commentDTO, cardsId, user);
+            CommentRequestDto commentRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        Comment newComment = commentService.addComment(commentRequestDto, cardsId, userDetails.getUser());
         return ResponseEntity.ok().body(newComment);
     }
 
     @PutMapping("/{cardsId}/comment/{commentId}")
     public ResponseEntity<Comment> modifyComment(
-            @RequestBody CommentDto commentDto,
+            @RequestBody CommentRequestDto commentRequestDto,
             @PathVariable Long cardsId,
             @PathVariable Long commentId,
-            User user){
-        Comment modifyComment = commentService.modifyComment(commentDto, cardsId, commentId, user);
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        Comment modifyComment = commentService.modifyComment(commentRequestDto, cardsId, commentId, userDetails.getUser());
         return ResponseEntity.ok().body(modifyComment);
     }
 
@@ -38,8 +39,8 @@ public class CommentController {
     public ResponseEntity<Void> deleteComment(
             @PathVariable Long cardsId,
             @PathVariable Long commentId,
-            User user){
-        commentService.removeComment(cardsId, commentId, user);
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        commentService.removeComment(cardsId, commentId, userDetails.getUser());
         return ResponseEntity.noContent().build();
     }
 }

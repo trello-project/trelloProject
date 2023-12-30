@@ -2,7 +2,7 @@ package com.example.trelloproject.comment.service;
 
 import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.card.repository.CardRepository;
-import com.example.trelloproject.comment.dto.CommentDto;
+import com.example.trelloproject.comment.dto.CommentRequestDto;
 import com.example.trelloproject.comment.entity.Comment;
 import com.example.trelloproject.comment.repository.CommentRepository;
 import com.example.trelloproject.global.exception.NotFoundCardException;
@@ -21,39 +21,39 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public Comment addComment(CommentDto commentDTO, Long cardsId, User loginUser) {
+    public Comment addComment(CommentRequestDto commentDTO, Long cardsId, User loginUser) {
+        // 카드 찾기
         Card card = findCard(cardsId);
 
-        Comment comment = Comment.builder()
+        // Comment 만들기
+        Comment newComment = Comment.builder()
                 .content(commentDTO.getContent())
                 .writer(loginUser.getUsername())
                 .build();
 
-        card.addComment(comment);
-        commentRepository.save(comment);
-        return comment;
+        // Comment 저장
+        card.addComment(newComment);
+        commentRepository.save(newComment);
+        return newComment;
     }
 
     @Transactional
     public void removeComment(Long cardsId, Long commentId, User loginUser) {
-        // 카드 찾기
-        findCard(cardsId);
         // 댓글 찾기
         Comment comment = findComment(commentId);
-        // 댓글의 작성자인지
+        // 댓글의 소유자와 로그인 유저가 일치 하는지?
         checkCommentOwnership(comment, loginUser);
 
         commentRepository.deleteById(commentId);
     }
 
     @Transactional
-    public Comment modifyComment(CommentDto commentDto, Long cardsId, Long commentId, User loginUser) {
-        // 카드를 찾으면 댓글의 정보를 알 수 있음
-        Card card = findCard(cardsId);
-        // 댓글을 찾으면 카드의 정보를 알 수 없음
+    public Comment modifyComment(CommentRequestDto commentDto, Long cardsId, Long commentId, User loginUser) {
+        // 댓글 찾기
         Comment comment = findComment(commentId);
+        // 댓글의 소유자와 로그인 유저가 일치 하는지?
         checkCommentOwnership(comment, loginUser);
-
+        // 해당 댓글 Content 수정
         comment.modify(commentDto.getContent());
         commentRepository.save(comment);
         return comment;
