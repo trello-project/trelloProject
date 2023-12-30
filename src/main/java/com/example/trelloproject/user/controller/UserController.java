@@ -1,7 +1,6 @@
 package com.example.trelloproject.user.controller;
 
 import com.example.trelloproject.Global.DTO.CommonResponseDTO;
-import com.example.trelloproject.User.DTO.LoginDTO;
 import com.example.trelloproject.User.Service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid LoginDTO loginDTO){
+    public ResponseEntity<?> login(@Valid com.example.trelloproject.User.DTO.LoginDto loginDTO){
         CommonResponseDTO<?> responseDTO = userService.login(loginDTO);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }

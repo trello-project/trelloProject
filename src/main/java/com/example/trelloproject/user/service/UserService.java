@@ -2,7 +2,6 @@ package com.example.trelloproject.user.service;
 
 import com.example.trelloproject.Global.DTO.CommonResponseDTO;
 import com.example.trelloproject.Global.Exception.NotFoundElementException;
-import com.example.trelloproject.User.DTO.LoginDTO;
 import com.example.trelloproject.User.Entity.User;
 import com.example.trelloproject.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,7 @@ public class UserService {
         return new CommonResponseDTO<>("회원 가입에 성공하셨습니다.", 200);
     }
 
-    public CommonResponseDTO<?> login(LoginDTO loginDTO) {
+    public CommonResponseDTO<?> login(com.example.trelloproject.User.DTO.LoginDto loginDTO) {
         // security 처리를 할지? 안할지?
         userRepository.findByUsername(loginDTO.getUsername()).orElseThrow();
 
