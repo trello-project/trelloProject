@@ -2,10 +2,14 @@ package com.example.trelloproject.board.entity;
 
 import com.example.trelloproject.board.dto.BoardRequestDto;
 import com.example.trelloproject.global.entity.Timestamped;
+import com.example.trelloproject.column.entity.Column;
 import com.example.trelloproject.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -17,12 +21,12 @@ public class Board extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String title;
 
     private String content;
 
-    @Enumerated (EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private BackgroundColor backgroundColor;
 
     private enum BackgroundColor{
@@ -33,6 +37,8 @@ public class Board extends Timestamped {
     @JoinColumn(name = "users_id")
     private User user;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Column> columns = new LinkedHashSet<>();
 
     public void setUser(User user) {
         this.user = user;
@@ -46,5 +52,9 @@ public class Board extends Timestamped {
     public void update(BoardRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
+    }
+
+    public void addColumn(Column column){
+        columns.add(column);
     }
 }

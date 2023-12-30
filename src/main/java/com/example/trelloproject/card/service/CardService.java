@@ -5,6 +5,9 @@ import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.card.repository.CardRepository;
 import com.example.trelloproject.column.entity.Column;
 import com.example.trelloproject.column.repository.ColumnRepository;
+import com.example.trelloproject.global.exception.NotFoundCardException;
+import com.example.trelloproject.global.exception.NotFoundColumnException;
+import com.example.trelloproject.global.exception.NotFoundElementException;
 import com.example.trelloproject.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -96,13 +99,13 @@ public class CardService{
 
     private Card findCard(long cardsId){
         return cardRepository.findById(cardsId).orElseThrow(
-                ()-> new com.example.trelloproject.Global.Exception.NotFoundElementException("해당 카드는 존재하지 않습니다.")
+                ()-> new NotFoundCardException("해당 카드는 존재하지 않습니다.")
         );
     }
 
     private Column findColumn(Long columnId){
         return columnRepository.findById(columnId).orElseThrow(
-                ()-> new com.example.trelloproject.Global.Exception.NotFoundElementException("해당 컬럼은 존재하지 않습니다.")
+                ()-> new NotFoundColumnException("해당 컬럼은 존재하지 않습니다.")
         );
     }
 
