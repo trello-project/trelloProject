@@ -112,14 +112,14 @@ public class ColumnService {
     // 게시글 찾는 메서드
     private Board findBoard(Long boardsId){
         // 보드 찾기
-        com.example.trelloproject.Board.Entity.Board board = boardRepository.findById(boardsId).orElseThrow(
+        Board board = boardRepository.findById(boardsId).orElseThrow(
                 () -> new NotFoundBoardException("해당 보드가 존재하지 않습니다.")
         );
         return board;
     }
 
     // 칼럼 한 개를 찾는 메서드
-    private Column findColumn(com.example.trelloproject.Board.Entity.Board board, Long listsId){
+    private Column findColumn(Board board, Long listsId){
         Column column = board.getColumns()
                 .stream()
                 .filter(c -> c.getId().equals(listsId))

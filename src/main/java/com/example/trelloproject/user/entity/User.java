@@ -1,4 +1,4 @@
-package com.example.trelloproject.User.Entity;
+package com.example.trelloproject.user.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

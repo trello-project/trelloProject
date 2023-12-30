@@ -1,4 +1,4 @@
-package com.example.trelloproject.column.Controller;
+package com.example.trelloproject.column.controller;
 
 import com.example.trelloproject.column.dto.ColumnRequestDto;
 import com.example.trelloproject.column.entity.Column;

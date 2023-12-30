@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(com.example.trelloproject.Global.Exception.NotFoundElementException.class)
+    @ExceptionHandler(NotFoundElementException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResponseDto<?> noSuchElementException(NoSuchElementException e) {
         return new CommonResponseDto<>(e.getMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
         return new CommonResponseDto<>(e.getMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
     }
 
-    @ExceptionHandler(com.example.trelloproject.global.exception.UnauthorizedAccessException.class)
+    @ExceptionHandler(UnauthorizedAccessException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public CommonResponseDto<?> unauthorizedAccessException(NoSuchElementException e) {
         return new CommonResponseDto<>(e.getMessage(), LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value());

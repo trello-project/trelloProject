@@ -1,4 +1,4 @@
-package com.example.trelloproject.User.Repository;
+package com.example.trelloproject.user.repository;
 
 import com.example.trelloproject.User.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

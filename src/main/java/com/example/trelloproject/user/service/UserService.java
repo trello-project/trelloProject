@@ -1,9 +1,8 @@
-package com.example.trelloproject.User.Service;
+package com.example.trelloproject.user.service;
 
 import com.example.trelloproject.Global.DTO.CommonResponseDTO;
 import com.example.trelloproject.Global.Exception.NotFoundElementException;
 import com.example.trelloproject.User.DTO.LoginDTO;
-import com.example.trelloproject.User.DTO.SignupDTO;
 import com.example.trelloproject.User.Entity.User;
 import com.example.trelloproject.User.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    public CommonResponseDTO<?> signup(SignupDTO signupDTO) {
+    public CommonResponseDTO<?> signup(com.example.trelloproject.User.DTO.SignupDto signupDTO) {
         userRepository.findByUsername(signupDTO.getUsername()).orElseThrow(
                 ()-> new NotFoundElementException("해당 유저 네임이 존재하지 않습니다.")
         );

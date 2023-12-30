@@ -1,4 +1,4 @@
-package com.example.trelloproject.User.Entity;
+package com.example.trelloproject.user.entity;
 
 public enum UserRoleEnum {
     USER(Authority.USER),  // 사용자 권한
