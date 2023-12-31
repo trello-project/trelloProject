@@ -4,6 +4,7 @@ import com.example.trelloproject.card.dto.CardBackgroundColorModifyDto;
 import com.example.trelloproject.card.dto.CardContentModifyDto;
 import com.example.trelloproject.card.dto.CardRequestDto;
 import com.example.trelloproject.card.dto.CardTitleModifyDto;
+import com.example.trelloproject.column.entity.Columns;
 import com.example.trelloproject.comment.entity.Comment;
 import com.example.trelloproject.user.entity.User;
 import jakarta.persistence.*;
@@ -32,6 +33,9 @@ public class Card{
     private String content;
     private String writer;
 
+    @ManyToOne
+    @JoinColumn(name = "columns_id")
+    private Columns columns;
     // relation
     // 헤당 빽그라운드 컬러에 대해서 조금 생각 해보기
     @Column(nullable = false)
@@ -43,7 +47,7 @@ public class Card{
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cardId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UsersCards> assignees = new LinkedHashSet<>();
 
     // constructor
@@ -71,7 +75,7 @@ public class Card{
     }
 
     public void removeAssignee(User user) {
-        assignees.removeIf(usersCards -> usersCards.getUser().equals(user));
+        assignees.removeIf(usersCards -> usersCards.getUserId().equals(user));
     }
 
     public void changeCardColor(CardBackgroundColorModifyDto requestDto){

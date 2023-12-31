@@ -1,17 +1,18 @@
 package com.example.trelloproject.board.entity;
 
 import com.example.trelloproject.board.dto.BoardRequestDto;
+import com.example.trelloproject.column.entity.Columns;
 import com.example.trelloproject.global.entity.Timestamped;
 import com.example.trelloproject.user.entity.User;
-import com.example.trelloproject.column.entity.Column;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
+// 유저A가 유저B, C 를 보드에 초대
+// 유저C는 수락
+// 초대 연락을 이메일로 받고 이메일에서 링크를 클릭했을 때 수락이 되도록?
 @Entity
 @Getter
 @NoArgsConstructor
@@ -40,8 +41,8 @@ public class Board extends Timestamped {
     @JoinColumn(name = "users_id")
     private User user;
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Column> columns = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Columns> columns = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "board")
     private Set<UserBoard> invitedUsers = new LinkedHashSet<>();
@@ -60,8 +61,8 @@ public class Board extends Timestamped {
         this.content = requestDto.getContent();
     }
 
-    public void addColumn(Column column){
-        columns.add(column);
+    public void addColumn(Columns columns){
+        this.columns.add(columns);
     }
 
     // 임시 테스트 메서드

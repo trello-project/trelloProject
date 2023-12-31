@@ -1,10 +1,8 @@
 package com.example.trelloproject.comment.entity;
 
+import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.global.entity.Timestamped;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +21,10 @@ public class Comment extends Timestamped {
     private String content;
 
     private String writer;
+
+    @ManyToOne
+    @JoinColumn(name = "card_id")
+    private Card card;
 
     @Builder
     public Comment(String content, String writer){

@@ -17,11 +17,12 @@ public class UserBoard {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
     private Board board;
-
 
     private Boolean isAccepted;
 
@@ -32,5 +33,6 @@ public class UserBoard {
     public UserBoard(Board board, User user) {
         this.board = board;
         this.user = user;
+        this.isAccepted = false;
     }
 }

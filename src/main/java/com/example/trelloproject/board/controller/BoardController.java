@@ -57,9 +57,14 @@ public class BoardController {
 
     //보드 초대
     @PostMapping("/{boardId}") ///{boardId}?user={userId}
-    private ResponseEntity<BoardResponseDto> inviteUserToBoard(@PathVariable Long boardId, @RequestParam("user") Long userId) {
-        BoardResponseDto responseDto = boardService.inviteUserToBoard(boardId, userId);
-        return ResponseEntity.ok().body(responseDto);
+    private ResponseEntity<Void> inviteUserToBoard(@PathVariable Long boardId, @RequestParam("user") Long userId) {
+        boardService.inviteUserToBoard(boardId, userId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/emailcheck")
+    public ResponseEntity emailCheck (@RequestParam String email) {
+        boardService.inviteConfirmation(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

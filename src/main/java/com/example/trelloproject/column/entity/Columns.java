@@ -1,5 +1,6 @@
 package com.example.trelloproject.column.entity;
 
+import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.column.dto.ColumnRequestDto;
 import jakarta.persistence.*;
@@ -15,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Column {
+public class Columns {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +24,15 @@ public class Column {
 
     private String title;
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
+
+    @OneToMany(mappedBy = "columns", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Card> cards = new LinkedHashSet<>();
 
     @Builder
-    public Column(String title, Set<Card> cards){
+    public Columns(String title, Set<Card> cards){
         this.title = title;
         this.cards = cards;
     }

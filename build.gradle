@@ -43,6 +43,9 @@ dependencies {
 
     // validation 추가
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // 이메일로 초대 수락
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {

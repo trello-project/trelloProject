@@ -1,5 +1,6 @@
 package com.example.trelloproject.user.controller;
 
+import com.example.trelloproject.board.service.BoardService;
 import com.example.trelloproject.global.exception.RequestValidationFailException;
 import com.example.trelloproject.user.dto.UserSignupDto;
 import com.example.trelloproject.user.service.UserService;
@@ -9,10 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +19,7 @@ import java.util.List;
 @RequestMapping("v1/users")
 public class UserController {
     private final UserService userService;
+    private final BoardService boardService;
 
     @PostMapping("/signup")
     public ResponseEntity signup(

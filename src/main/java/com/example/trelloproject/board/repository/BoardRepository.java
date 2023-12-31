@@ -15,5 +15,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT ub.user FROM UserBoard ub WHERE ub.board.id = :boardId")
     Set<User> findInvitedUsersByBoardId(@Param("boardId") Long boardId);
 
-    Optional<Board> findByColumnId(Long columnId);
+    Optional<Board> findByColumnsId(Long columnsId);
 }
