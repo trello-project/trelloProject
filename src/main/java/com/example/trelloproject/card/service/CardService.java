@@ -7,7 +7,7 @@ import com.example.trelloproject.card.dto.CardRequestDto;
 import com.example.trelloproject.card.dto.CardTitleModifyDto;
 import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.card.repository.CardRepository;
-import com.example.trelloproject.column.entity.Column;
+import com.example.trelloproject.column.entity.Columns;
 import com.example.trelloproject.column.repository.ColumnRepository;
 import com.example.trelloproject.global.exception.NotFoundCardException;
 import com.example.trelloproject.global.exception.NotFoundColumnException;
@@ -43,7 +43,7 @@ public class CardService{
     // 카드 생성
     public Card addCard(CardRequestDto cardDto, Long columnId, User user/*UserDetails userDetails*/){
         // 컬럼 찾기
-        Column column = findColumn(columnId);
+        Columns columns = findColumn(columnId);
 
         Card newCard = Card.builder()
                 .title(cardDto.getTitle())
@@ -52,7 +52,7 @@ public class CardService{
                 .build();
 
         // 리스트 내부에 카드를 생성할 수 있어야 합니다.
-        column.addCard(newCard);
+        columns.addCard(newCard);
         cardRepository.save(newCard);
         return newCard;
     }
@@ -134,7 +134,7 @@ public class CardService{
 
     }
 
-    private Column findColumn(Long columnId){
+    private Columns findColumn(Long columnId){
         return columnRepository.findById(columnId).orElseThrow(
                 ()-> new NotFoundColumnException("해당 컬럼은 존재하지 않습니다.")
         );

@@ -3,7 +3,7 @@ package com.example.trelloproject.column.service;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.repository.BoardRepository;
 import com.example.trelloproject.column.dto.ColumnRequestDto;
-import com.example.trelloproject.column.entity.Column;
+import com.example.trelloproject.column.entity.Columns;
 import com.example.trelloproject.column.repository.ColumnRepository;
 import com.example.trelloproject.global.exception.NotFoundBoardException;
 import com.example.trelloproject.global.exception.NotFoundColumnException;
@@ -23,21 +23,21 @@ public class ColumnService {
     // private final ColumnRepositoryQuery columnRepositoryQuery;
 
     // 컬럼 추가
-    public Column addColumn(Long boardsId, Long listsId, ColumnRequestDto columnDTO, User user) {
+    public Columns addColumn(Long boardsId, Long listsId, ColumnRequestDto columnDTO, User user) {
         // 해당 리스트를 탐색을 할지? 게시판을 탐색을 할지?
         // 내 생각에는 리스트를 탐색을 하면 바로 boardRepository를 탐색할 이유가 없는데?
         Board board = boardRepository.findById(boardsId).orElseThrow(
                 ()-> new NotFoundBoardException("해당 게시판이 존재하지 않습니다.")
         );
 
-        Column newColumn = Column.builder()
+        Columns newColumns = Columns.builder()
                 .title(columnDTO.getTitle())
                 .build();
 
-        board.addColumn(newColumn);
+        board.addColumn(newColumns);
         boardRepository.save(board);
 
-        return newColumn;
+        return newColumns;
     }
 
     // #2 feedback
@@ -50,20 +50,20 @@ public class ColumnService {
 
     // 컬럼 수정
     // modified 변경
-    public Column updateColumn(Long boardsId, Long listsId, ColumnRequestDto columnDto, User user) {
+    public Columns updateColumn(Long boardsId, Long listsId, ColumnRequestDto columnDto, User user) {
         // 해당 게시글 찾기
         Board board = findBoard(boardsId);
         // 해당 컬럼 찾기
-        Column column = findColumn(board, listsId);
-        column.updateTitle(columnDto);
-        columnRepository.save(column);
+        Columns columns = findColumn(board, listsId);
+        columns.updateTitle(columnDto);
+        columnRepository.save(columns);
         // feedback #3 : statusCode를 어디다 둬야돼?
-        return column;
+        return columns;
     }
 
     // 컬럼 순서 변경
     @Transactional
-    public Column changeColumnOrder(Long boardsId, Long listsId1, Long listsId2, Long commentId, User user) {
+    public Columns changeColumnOrder(Long boardsId, Long listsId1, Long listsId2, Long commentId, User user) {
         /*
         // 게시판 찾기
         Board board = findBoard(boardsId);
@@ -103,9 +103,9 @@ public class ColumnService {
     }
 
     // 모든 컬럼 조회
-    public List<Column> getColumns(Long boardsId, Long listsId) {
+    public List<Columns> getColumns(Long boardsId, Long listsId) {
         findBoard(boardsId);
-        List<Column> columns = columnRepository.findAll();
+        List<Columns> columns = columnRepository.findAll();
         return columns;
     }
 
@@ -119,14 +119,14 @@ public class ColumnService {
     }
 
     // 칼럼 한 개를 찾는 메서드
-    private Column findColumn(Board board, Long listsId){
-        Column column = board.getColumns()
+    private Columns findColumn(Board board, Long listsId){
+        Columns columns = board.getColumns()
                 .stream()
                 .filter(c -> c.getId().equals(listsId))
                 .findFirst()
                 .orElseThrow(
                         () -> new NotFoundColumnException("해당 컬럼이 존재하지 않습니다.")
                 );
-        return column;
+        return columns;
     }
 }
