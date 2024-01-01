@@ -1,9 +1,7 @@
 package com.example.trelloproject.global.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor
 public class CommonResponseDto<T> {
     private String message;
