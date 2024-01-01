@@ -12,7 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -21,8 +20,7 @@ import java.util.Set;
 
 // Entity
 @Entity
-@Table(name = "cards")
-public class Card {
+public class Card{
 
     // field
     @Id
@@ -46,7 +44,7 @@ public class Card {
 
     @ManyToOne
     @JoinColumn(name = "columns_id")
-    private com.example.trelloproject.column.entity.Column column;
+    private Columns columns;
 
     // 연관 관계의 주인 card -> card에서 해당 comment의 정보를 다 알 수 있어야하고
     // comment쪽에서는 몰라도 됨
@@ -54,7 +52,7 @@ public class Card {
     private Set<Comment> comments = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserCard> assignees = new LinkedHashSet<>();
+    private List<UserCard> assignees = new ArrayList<>();
 
     // constructor
     @Builder
@@ -81,7 +79,7 @@ public class Card {
     }
 
     public void removeAssignee(User user) {
-        assignees.removeIf(usersCards -> usersCards.getUser().equals(user));
+        assignees.removeIf(userCard -> userCard.getUserId().equals(user));
     }
 
     public void changeCardColor(CardBackgroundColorModifyDto requestDto){

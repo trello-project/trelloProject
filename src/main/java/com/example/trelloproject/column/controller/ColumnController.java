@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @RestController
-@RequestMapping
+@RequestMapping("/v1/boards")
+@RequiredArgsConstructor
 public class ColumnController {
 
     private final ColumnService columnService;

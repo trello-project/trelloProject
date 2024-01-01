@@ -1,4 +1,5 @@
 package com.example.trelloproject.user.util;
+
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.entity.UserBoard;
 import com.example.trelloproject.user.entity.User;
