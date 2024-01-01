@@ -2,17 +2,17 @@ package com.example.trelloproject.card.entity;
 
 import com.example.trelloproject.card.dto.CardBackgroundColorModifyDto;
 import com.example.trelloproject.card.dto.CardContentModifyDto;
-import com.example.trelloproject.card.dto.CardRequestDto;
 import com.example.trelloproject.card.dto.CardTitleModifyDto;
+import com.example.trelloproject.column.entity.Columns;
 import com.example.trelloproject.comment.entity.Comment;
 import com.example.trelloproject.user.entity.User;
 import jakarta.persistence.*;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -21,7 +21,8 @@ import java.util.Set;
 
 // Entity
 @Entity
-public class Card{
+@Table(name = "cards")
+public class Card {
 
     // field
     @Id
@@ -29,14 +30,23 @@ public class Card{
     private Long id;
 
     private String title;
+
     private String content;
+
     private String writer;
 
+    @ManyToOne
+    @JoinColumn(name = "columns_id")
+    private Columns columns;
     // relation
     // 헤당 빽그라운드 컬러에 대해서 조금 생각 해보기
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private CardBackgroundColor backgroundColor;
+
+    @ManyToOne
+    @JoinColumn(name = "columns_id")
+    private com.example.trelloproject.column.entity.Column column;
 
     // 연관 관계의 주인 card -> card에서 해당 comment의 정보를 다 알 수 있어야하고
     // comment쪽에서는 몰라도 됨
@@ -44,7 +54,7 @@ public class Card{
     private Set<Comment> comments = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UsersCards> assignees = new LinkedHashSet<>();
+    private Set<UserCard> assignees = new LinkedHashSet<>();
 
     // constructor
     @Builder
@@ -66,8 +76,8 @@ public class Card{
     }
 
     public void addAssignee(User user){
-        UsersCards usersCards = new UsersCards(user, this);
-        assignees.add(usersCards);
+        UserCard userCard = new UserCard(user, this);
+        assignees.add(userCard);
     }
 
     public void removeAssignee(User user) {

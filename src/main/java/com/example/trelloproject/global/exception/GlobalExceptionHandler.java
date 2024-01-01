@@ -55,8 +55,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnauthorizedAccessException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResponseDto<?> unauthorizedAccessException(NoSuchElementException e) {
-        return new CommonResponseDto<>(e.getMessage(), LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value());
+        return new CommonResponseDto<>(e.getMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
     }
 }
