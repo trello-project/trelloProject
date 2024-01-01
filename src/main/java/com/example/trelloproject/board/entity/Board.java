@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-// 유저A가 유저B, C 를 보드에 초대
-// 유저C는 수락
-// 초대 연락을 이메일로 받고 이메일에서 링크를 클릭했을 때 수락이 되도록?
+
 @Entity
 @Getter
 @NoArgsConstructor

@@ -13,23 +13,25 @@ import lombok.NoArgsConstructor;
 @IdClass(UsersCardsId.class)
 public class UsersCards {
 
-    @Getter(AccessLevel.NONE)
-    @Column(name = "id", nullable = false)
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Getter(AccessLevel.NONE)
+//    @Column(name = "id", nullable = false)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User userId;
 
+    @Id
     @ManyToOne
-    @JoinColumn(name = "channel_id")
-    private Card card;
+    @JoinColumn(name = "card_id")
+    private Card cardId;
 
     @Builder
     public UsersCards(User user, Card card){
-        this.user = user;
-        this.card = card;
+        this.userId = user;
+        this.cardId = card;
     }
 }

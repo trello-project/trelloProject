@@ -1,17 +1,15 @@
 package com.example.trelloproject.user.service;
 
 
-import com.example.trelloproject.dto.UpdateProfileRequestDto;
 import com.example.trelloproject.global.refreshToken.RefreshTokenRepository;
-import com.example.trelloproject.user.dto.*;
+import com.example.trelloproject.user.dto.UserResponseDto;
+import com.example.trelloproject.user.dto.UserSignupDto;
 import com.example.trelloproject.user.entity.User;
 import com.example.trelloproject.user.entity.UserRoleEnum;
 import com.example.trelloproject.user.repository.UserRepository;
 import com.example.trelloproject.user.util.UserValidUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,4 +30,8 @@ public class UserService {
         userRepository.save(user);
         return new UserResponseDto(user);
     }
+
+//    public void acceptInvitation(User invitedUser, Board board) {
+//        invitationService.acceptInvitation(invitedUser, board);
+//    }
 }
