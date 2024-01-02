@@ -44,10 +44,12 @@ public class BoardService {
         return board;
     }
 
-    public List<Board> getAllBoards() {
-        List<Board> boardList = boardRepository.findAll();
-        return boardList;
+    public List<Board> getMyBoards(User user) {
+        List<Board> myBoardList = boardRepository.findByUser(user);
+      return myBoardList;
     }
+
+
 
     @Transactional
     public CommonResponseDto<?> updateBoard(Long boardId, BoardRequestDto requestDto, User user) {
@@ -107,4 +109,22 @@ public class BoardService {
         userBoard.setAccepted(true);
         userBoardRepository.save(userBoard);
     }
+
+
+    //보드 초대 멤버 확인
+    public List<User> checkBoardMembers(Long boardId) {
+        //List<User> acceptedUserList = new ArrayList<>();
+        //List<User> userList = userBoardRepository.findByBoardId(boardId);
+
+        List<User> acceptedUserList = userBoardRepository.findByBoardIdAndIsAccepted(boardId,true);
+
+/*     userList.forEach(user -> {
+         if (userBoardRepository.findByUserId(user.getId()).getIsAccepted()){
+             acceptedUserList.add(user);
+         }
+     });*/
+
+        return acceptedUserList;
+    }
+
 }

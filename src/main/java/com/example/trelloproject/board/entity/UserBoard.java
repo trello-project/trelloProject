@@ -35,4 +35,6 @@ public class UserBoard {
         this.board = board;
         this.user = user;
     }
+
+
 }
