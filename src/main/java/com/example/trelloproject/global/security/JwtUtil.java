@@ -18,7 +18,7 @@ import java.util.Date;
 @Slf4j(topic = "JwtUil")
 public class JwtUtil {
     // Header Access KEY 값
-    public static final String ACCESS_TOKEN_HEADER = "AccessToken";
+    public static final String ACCESS_TOKEN_HEADER = "Authorization";
 
     // Header refresh token 값
     public static final String REFRESH_TOKEN_HEADER = "refreshToken";

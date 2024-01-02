@@ -1,10 +1,14 @@
 package com.example.trelloproject.board.service;
 
+import com.example.trelloproject.board.dto.BoardBackgroundColorModifyDto;
+import com.example.trelloproject.board.dto.BoardColumnCardResponseDto;
 import com.example.trelloproject.board.dto.BoardRequestDto;
+import com.example.trelloproject.board.dto.BoardResponseDto;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.entity.UserBoard;
 import com.example.trelloproject.board.repository.BoardRepository;
 import com.example.trelloproject.board.repository.UserBoardRepository;
+import com.example.trelloproject.card.dto.CardBackgroundColorModifyDto;
 import com.example.trelloproject.global.dto.CommonResponseDto;
 import com.example.trelloproject.global.exception.NotFoundUserException;
 import com.example.trelloproject.user.entity.User;
@@ -39,9 +43,10 @@ public class BoardService {
         return board;
     }
 
-    public Board getBoard(Long boardId) {
+    public BoardColumnCardResponseDto getBoard(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드 입니다."));
-        return board;
+        BoardColumnCardResponseDto responseDto = new BoardColumnCardResponseDto(board);
+        return responseDto;
     }
 
     public List<Board> getMyBoards(User user) {
@@ -113,18 +118,18 @@ public class BoardService {
 
     //보드 초대 멤버 확인
     public List<User> checkBoardMembers(Long boardId) {
-        //List<User> acceptedUserList = new ArrayList<>();
-        //List<User> userList = userBoardRepository.findByBoardId(boardId);
-
         List<User> acceptedUserList = userBoardRepository.findByBoardIdAndIsAccepted(boardId,true);
-
-/*     userList.forEach(user -> {
-         if (userBoardRepository.findByUserId(user.getId()).getIsAccepted()){
-             acceptedUserList.add(user);
-         }
-     });*/
-
         return acceptedUserList;
     }
+
+    //보드 배경색 수정
+    @Transactional
+    public BoardResponseDto modifyBoardColor(Long boardId, BoardBackgroundColorModifyDto boardBackgroundColorModifyDto){
+        Board board = boardRepository.findById(boardId).orElseThrow(()->new IllegalArgumentException("존재하지 않는 보드입니다."));
+        board.updateColor(boardBackgroundColorModifyDto);
+        boardRepository.save(board);
+        return new BoardResponseDto(board);
+    }
+
 
 }

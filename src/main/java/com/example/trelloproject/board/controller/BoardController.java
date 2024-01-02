@@ -1,8 +1,13 @@
 package com.example.trelloproject.board.controller;
 
+import com.example.trelloproject.board.dto.BoardBackgroundColorModifyDto;
+import com.example.trelloproject.board.dto.BoardColumnCardResponseDto;
 import com.example.trelloproject.board.dto.BoardRequestDto;
+import com.example.trelloproject.board.dto.BoardResponseDto;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.service.BoardService;
+import com.example.trelloproject.card.dto.CardBackgroundColorModifyDto;
+import com.example.trelloproject.card.dto.CardResponseDto;
 import com.example.trelloproject.global.dto.CommonResponseDto;
 import com.example.trelloproject.global.security.UserDetailsImpl;
 import com.example.trelloproject.global.security.UserDetailsServiceImpl;
@@ -28,15 +33,16 @@ public class BoardController {
     private ResponseEntity<Board> createBoard(
             @RequestBody BoardRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        System.out.println("userDetails.getUser().getUsername()"+userDetails.getUser().getUsername());
         Board board = boardService.createBoard(requestDto, userDetails.getUser());
         return ResponseEntity.ok().body(board);
     }
 
     //보드 단건 조회
     @GetMapping("/{boardId}")
-    private ResponseEntity<Board> getBoard(@PathVariable Long boardId) {
-        Board board = boardService.getBoard(boardId);
-        return ResponseEntity.ok().body(board);
+    private ResponseEntity<BoardColumnCardResponseDto> getBoard(@PathVariable Long boardId) {
+        BoardColumnCardResponseDto responseDto = boardService.getBoard(boardId);
+        return ResponseEntity.ok().body(responseDto);
     }
 
     //본인이 만든 보드 조회
@@ -79,6 +85,13 @@ public class BoardController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    //보드 배경색 변경
+    @PatchMapping ("/{boardId}/boardColor")
+    public ResponseEntity<BoardResponseDto> modifyBoardBackgroundColor(
+            @RequestBody BoardBackgroundColorModifyDto cardBackgroundColorModifyDto,
+            @PathVariable Long boardId) {
+        BoardResponseDto responseDto = boardService.modifyBoardColor(boardId,cardBackgroundColorModifyDto);
+        return ResponseEntity.ok().body(responseDto);
+    }
 
 }
