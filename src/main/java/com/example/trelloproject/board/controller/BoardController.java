@@ -1,9 +1,6 @@
 package com.example.trelloproject.board.controller;
 
-import com.example.trelloproject.board.dto.BoardBackgroundColorModifyDto;
-import com.example.trelloproject.board.dto.BoardColumnCardResponseDto;
-import com.example.trelloproject.board.dto.BoardRequestDto;
-import com.example.trelloproject.board.dto.BoardResponseDto;
+import com.example.trelloproject.board.dto.*;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.service.BoardService;
 import com.example.trelloproject.card.dto.CardBackgroundColorModifyDto;
@@ -33,7 +30,6 @@ public class BoardController {
     private ResponseEntity<Board> createBoard(
             @RequestBody BoardRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        System.out.println("userDetails.getUser().getUsername()"+userDetails.getUser().getUsername());
         Board board = boardService.createBoard(requestDto, userDetails.getUser());
         return ResponseEntity.ok().body(board);
     }
@@ -47,8 +43,8 @@ public class BoardController {
 
     //본인이 만든 보드 조회
     @GetMapping
-    private ResponseEntity<List<Board>> getMyBoards(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<Board> myBoardList = boardService.getMyBoards(userDetails.getUser());
+    private ResponseEntity<List<BoardResDto>> getMyBoards(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<BoardResDto> myBoardList = boardService.getMyBoards(userDetails.getUser());
         return ResponseEntity.ok().body(myBoardList);
     }
 

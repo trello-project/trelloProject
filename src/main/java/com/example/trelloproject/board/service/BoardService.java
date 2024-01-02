@@ -1,9 +1,6 @@
 package com.example.trelloproject.board.service;
 
-import com.example.trelloproject.board.dto.BoardBackgroundColorModifyDto;
-import com.example.trelloproject.board.dto.BoardColumnCardResponseDto;
-import com.example.trelloproject.board.dto.BoardRequestDto;
-import com.example.trelloproject.board.dto.BoardResponseDto;
+import com.example.trelloproject.board.dto.*;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.entity.UserBoard;
 import com.example.trelloproject.board.repository.BoardRepository;
@@ -25,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -49,9 +47,11 @@ public class BoardService {
         return responseDto;
     }
 
-    public List<Board> getMyBoards(User user) {
-        List<Board> myBoardList = boardRepository.findByUser(user);
-      return myBoardList;
+    public List<BoardResDto> getMyBoards(User user) {
+        List<Board> myBoardList = boardRepository.findAllByUser(user);
+      return myBoardList.stream()
+              .map(board -> new BoardResDto(board))
+              .collect(Collectors.toList());
     }
 
 
