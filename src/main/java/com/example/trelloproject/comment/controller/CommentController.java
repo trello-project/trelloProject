@@ -23,7 +23,7 @@ public class CommentController {
     @PostMapping("/{cardsId}/comment")
     public ResponseEntity<Comment> addComment(
             @PathVariable Long cardsId,
-            CommentRequestDto commentRequestDto,
+            @RequestBody CommentRequestDto commentRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         Comment newComment = commentService.addComment(commentRequestDto, cardsId, userDetails.getUser());
 
@@ -47,7 +47,7 @@ public class CommentController {
         return ResponseEntity.ok().body(modifyCommentDto);
     }
 
-    @DeleteMapping("/cards/{cardsId}/comment/{commentId}")
+    @DeleteMapping("/{cardsId}/comment/{commentId}")
     public ResponseEntity<Void> deleteComment(
             @PathVariable Long cardsId,
             @PathVariable Long commentId,

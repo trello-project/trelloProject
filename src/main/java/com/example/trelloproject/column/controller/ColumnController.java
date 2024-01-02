@@ -49,15 +49,13 @@ public class ColumnController {
         return ResponseEntity.ok().body(responseDto);
     }
 
-    @PostMapping("{boardsId}/lists/{firstListsId}/{secondListsId}/columns/{commentId}")
-    public ResponseEntity<Columns> changeColumnOrder(
+    @PostMapping("{boardsId}/columns/{columnsId}/order/{newOrder}")
+    public ResponseEntity<ColumnsResponseDto> changeColumnOrder(
             @PathVariable Long boardsId,
-            @PathVariable Long firstListsId,
-            @PathVariable Long secondListsId,
-            @PathVariable Long commentId,
-            User user){
-        Columns column = columnService.changeColumnOrder(boardsId, firstListsId, secondListsId, commentId, user);
-        return new ResponseEntity<>(column, HttpStatus.OK);
+            @PathVariable Long columnsId,
+            @PathVariable int newOrder){
+        ColumnsResponseDto responseDto = columnService.updateColumnSequence(boardsId, columnsId, newOrder);
+        return ResponseEntity.ok().body(responseDto);
     }
 
     @GetMapping("{boardsId}/columns")
