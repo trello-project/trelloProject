@@ -1,11 +1,14 @@
 package com.example.trelloproject.card.entity;
 
+import com.example.trelloproject.card.dto.AddAssigneeDto;
 import com.example.trelloproject.card.dto.CardBackgroundColorModifyDto;
 import com.example.trelloproject.card.dto.CardContentModifyDto;
 import com.example.trelloproject.card.dto.CardTitleModifyDto;
 import com.example.trelloproject.column.entity.Columns;
 import com.example.trelloproject.comment.entity.Comment;
+import com.example.trelloproject.global.entity.Timestamped;
 import com.example.trelloproject.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,7 +23,7 @@ import java.util.List;
 
 // Entity
 @Entity
-public class Card {
+public class Card extends Timestamped {
 
     // field
     @Id
@@ -36,12 +39,13 @@ public class Card {
     @Column(name = "order_column")
     private int order;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "columns_id")
     private Columns columns;
     // relation
     // 헤당 빽그라운드 컬러에 대해서 조금 생각 해보기
-    @Column(nullable = false)
+
     @Enumerated(value = EnumType.STRING)
     private CardBackgroundColor backgroundColor;
 
@@ -50,15 +54,21 @@ public class Card {
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserCard> assignees = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(name = "card_assignees", joinColumns = @JoinColumn(name = "card_id"))
+    @Column(name = "assignee")
+    private List<String> assignees = new ArrayList<>();
 
     // constructor
     @Builder
-    public Card(String title, String content, String writer){
+    public Card(String title, String content, String writer,
+                CardBackgroundColor backgroundColor, int order, Columns columns){
         this.title = title;
         this.content = content;
         this.writer = writer;
+        this.backgroundColor = backgroundColor;
+        this.order = order;
+        this.columns = columns;
     }
     public void addComment(Comment comment){
         comments.add(comment);
@@ -72,12 +82,12 @@ public class Card {
         this.content = cardContentModifyDto.getContent();
     }
 
-    public void addAssignees(List<UserCard> newAssignees){
-        assignees.addAll(newAssignees);
+    public void addAssignees(List<String> assigneeNames) {
+        assignees.addAll(assigneeNames);
     }
 
     public void removeAssignee(User user) {
-        assignees.removeIf(usersCards -> usersCards.getUser().equals(user));
+        // assignees.removeIf(usersCards -> usersCards.getUser().equals(user));
     }
 
     public void changeCardColor(CardBackgroundColorModifyDto requestDto){

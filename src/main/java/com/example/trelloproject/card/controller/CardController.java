@@ -4,10 +4,14 @@ import com.example.trelloproject.card.dto.*;
 import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.card.service.CardService;
 import com.example.trelloproject.global.security.UserDetailsImpl;
+import com.example.trelloproject.user.dto.UserResponseDto;
+import com.example.trelloproject.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // v1는 무조건 위에
 @RequestMapping("/v1/columns")
@@ -22,6 +26,7 @@ public class CardController {
                 @PathVariable Long columnsId,
                 @RequestBody CardRequestDto cardDto,
                 @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = User.builder().username("test1").password("12341234").build();
             CardResponseDto cardResponseDto = cardService.addCard(cardDto, columnsId, userDetails.getUser());
             return ResponseEntity.ok().body(cardResponseDto);
     }
@@ -74,12 +79,12 @@ public class CardController {
     }
 
     @PostMapping("/{columnsId}/cards/{cardsId}/assignee")
-    public ResponseEntity<Void> addAssignee(
+    public ResponseEntity<List<UserResponseDto>> addAssignee(
             @PathVariable Long columnsId,
             @PathVariable Long cardsId,
-            @RequestBody CardAssigneeListDto assigneeListDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails){
-        cardService.addAssignee(columnsId, cardsId, assigneeListDto, userDetails.getUser());
+            @RequestBody AddAssigneeDto addAssigneeDto,
+            User loginUser){
+        cardService.addAssignee(columnsId, cardsId, addAssigneeDto, loginUser);
         return ResponseEntity.noContent().build();
     }
 

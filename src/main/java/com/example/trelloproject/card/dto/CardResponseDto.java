@@ -19,11 +19,12 @@ public class CardResponseDto {
     private String writer;
     private CardBackgroundColor backgroundColor;
     private List<Comment> comments;
-    private List<UserCard> assignees;
 
     public CardResponseDto(Card card){
         this.title = card.getTitle();
         this.writer = card.getWriter();
         this.content = card.getContent();
+        this.backgroundColor = card.getBackgroundColor();
+        this.comments = card.getComments();
     }
 }
