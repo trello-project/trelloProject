@@ -1,7 +1,6 @@
 package com.example.trelloproject.board.controller;
 
 import com.example.trelloproject.board.dto.BoardRequestDto;
-import com.example.trelloproject.board.dto.BoardResponseDto;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.service.BoardService;
 import com.example.trelloproject.global.dto.CommonResponseDto;
@@ -23,7 +22,9 @@ public class BoardController {
 
     //보드 생성
     @PostMapping
-    private ResponseEntity<Board> createBoard(@RequestBody BoardRequestDto requestDto, @AuthenticationPrincipal User user) {
+    private ResponseEntity<Board> createBoard(
+            @RequestBody BoardRequestDto requestDto,
+            @AuthenticationPrincipal User user) {
         Board board = boardService.createBoard(requestDto, user);
         return ResponseEntity.ok().body(board);
     }
@@ -39,7 +40,7 @@ public class BoardController {
     @GetMapping
     private ResponseEntity<CommonResponseDto<?>> getAllBoards(@PathVariable Long boardId) {
         List<Board> boardList = boardService.getAllBoards();
-        return new ResponseEntity<>(new CommonResponseDto<>("message",boardList,HttpStatus.OK.value()), HttpStatus.OK);
+        return new ResponseEntity<>(new CommonResponseDto<>("message",boardList, HttpStatus.OK.value()), HttpStatus.OK);
     }
 
     //보드 수정
@@ -55,11 +56,16 @@ public class BoardController {
         boardService.deleteBoard(boardId, user);
     }
 
-    //보드 초대
+    // 보드 초대
     @PostMapping("/{boardId}") ///{boardId}?user={userId}
-    private ResponseEntity<BoardResponseDto> inviteUserToBoard(@PathVariable Long boardId, @RequestParam("user") Long userId) {
-        BoardResponseDto responseDto = boardService.inviteUserToBoard(boardId, userId);
-        return ResponseEntity.ok().body(responseDto);
+    private ResponseEntity<Void> inviteUserToBoard(@PathVariable Long boardId, @RequestParam("user") Long userId) {
+        boardService.inviteUserToBoard(boardId, userId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/emailcheck")
+    public ResponseEntity<Void> emailCheck(@RequestParam String email) {
+        boardService.inviteConfirmation(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

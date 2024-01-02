@@ -76,11 +76,13 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
-                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()// resources 접근 허용 설정
-                        .requestMatchers("/", "/error/**").permitAll() // 메인페이지, error 페이지 접근 허용
-//                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()// resources 접근 허용 설
+                    .requestMatchers("/**","/error/**").permitAll() // 메인페이지, error 페이지 접근 허용
                     .requestMatchers("/v1/users/signup", "/v1/users/login").permitAll() // 회원가입, 로그인 페이지 접근 허용
-                    .anyRequest().authenticated()
+                    // #2 : test
+                    .requestMatchers("/v1/boards").permitAll()
+                    .requestMatchers("/v1/boards/emailcheck/**").permitAll()
+            .anyRequest().authenticated()
         );
 
 

@@ -9,3 +9,5 @@ public class BanUserException extends RuntimeException {
         super(message);
     }
 }
+
+// 상위 핸들러에서 ExceptionHandler...

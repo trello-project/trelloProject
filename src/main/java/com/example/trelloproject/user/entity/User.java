@@ -1,6 +1,5 @@
 package com.example.trelloproject.user.entity;
 
-
 import com.example.trelloproject.dto.UpdateProfileRequestDto;
 import com.example.trelloproject.global.util.StringListConverter;
 import jakarta.persistence.*;
@@ -15,7 +14,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +23,7 @@ public class User {
     @Column(length = 50, unique = true, nullable = false)
     private String username;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 200, nullable = false)
     private String password;
 
     @Column(length = 50, unique = true, nullable = false)
