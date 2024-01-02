@@ -80,7 +80,7 @@ public class SecurityConfig {
                     .requestMatchers("/**","/error/**").permitAll() // 메인페이지, error 페이지 접근 허용
                     .requestMatchers("/v1/users/signup", "/v1/users/login").permitAll() // 회원가입, 로그인 페이지 접근 허용
                     // #2 : test
-                    .requestMatchers("/v1/boards").permitAll()
+//                    .requestMatchers("/v1/boards").permitAll()
                     .requestMatchers("/v1/boards/emailcheck/**").permitAll()
             .anyRequest().authenticated()
         );
