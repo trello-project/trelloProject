@@ -6,21 +6,15 @@ import com.example.trelloproject.board.entity.UserBoard;
 import com.example.trelloproject.board.repository.BoardRepository;
 import com.example.trelloproject.board.repository.UserBoardRepository;
 import com.example.trelloproject.global.dto.CommonResponseDto;
-import com.example.trelloproject.global.exception.NotFoundUserException;
 import com.example.trelloproject.user.entity.User;
 import com.example.trelloproject.user.repository.UserRepository;
 import com.example.trelloproject.user.util.MailService;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -32,15 +26,15 @@ public class BoardService {
 
     public Board createBoard(BoardRequestDto requestDto, User user) {
         Board board = new Board(requestDto.getTitle(), requestDto.getContent());
-
         board.setUser(user);
-
         boardRepository.save(board);
         return board;
     }
 
     public Board getBoard(Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드 입니다."));
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 보드입니다.")
+        );
         return board;
     }
 
@@ -51,7 +45,9 @@ public class BoardService {
 
     @Transactional
     public CommonResponseDto<?> updateBoard(Long boardId, BoardRequestDto requestDto, User user) {
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드입니다."));
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 보드입니다.")
+        );
 
         if (!user.equals(board.getUser())) {
             throw new IllegalArgumentException("보드 생성자만 수정할 수 있습니다.");
@@ -63,9 +59,9 @@ public class BoardService {
     }
 
     public void deleteBoard(Long boardId, User user) {
-        Board board1 = boardRepository.findById(boardId).orElse(null);
-
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드입니다."));
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 보드입니다.")
+        );
 
         if (!user.equals(board.getUser())) {
             throw new IllegalArgumentException("보드 생성자만 수정할 수 있습니다.");
@@ -73,38 +69,33 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
-    public void inviteUserToBoard(Long boardId, Long userId) {
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드입니다."));
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+    public void inviteUserToBoard(Long boardId, Long userId, User inviter) throws IllegalAccessException {
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 보드입니다.")
+        );
 
-        // 찾기 잘하고 있어?
-        mailService.sendInvitation(user, board); // 이메일 보내기
+        if (!inviter.getUsername().equals(board.getUser().getUsername())) {
+            throw new IllegalAccessException("보드 생성자가 아닙니다.");
+        }
 
-        UserBoard userBoard = new UserBoard(board, user);
+        User invitee = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 유저입니다.")
+        );
+        mailService.sendInvitation(inviter, invitee, board);
+        UserBoard userBoard = new UserBoard(board, invitee);
         userBoardRepository.save(userBoard);
-        // return new BoardResponseDto(board);
     }
 
     @Transactional
-    public void inviteConfirmation (String email) {
-        // userboard
-        // email같은 user찾아..
-        // 회원가입을 하고 로그인을 해 -> 보드를 만들어요?
-        // 내가 아닌 타인을 초대해야돼
-        // 내가 나를 초대하고 있어
-
-        User user = userRepository.findByEmail(email).orElse(null);
-        if(user == null){
-
-        }
-
-        // 찾았어. userBoard에서
-        UserBoard userBoard = userBoardRepository.findByUserId(user.getId()).orElseThrow(
-                ()-> new IllegalArgumentException("테스트")
+    public void inviteConfirmation(String email) throws IllegalAccessException {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalAccessException("초대한 유저가 아닙니다.")
         );
 
-        // 여기서 찾았어
+        UserBoard userBoard = userBoardRepository.findByUserId(user.getId()).orElseThrow(
+                () -> new IllegalArgumentException("초대 수락 처리 중 에러가 발생했습니다.")
+        );
+
         userBoard.setAccepted(true);
-        userBoardRepository.save(userBoard);
     }
 }
