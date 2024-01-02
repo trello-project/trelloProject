@@ -1,6 +1,6 @@
 package com.example.trelloproject.user.service;
 
-import com.example.trelloproject.user.UserDetailsImpl;
+import com.example.trelloproject.global.security.UserDetailsImpl;
 import com.example.trelloproject.user.entity.User;
 import com.example.trelloproject.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;

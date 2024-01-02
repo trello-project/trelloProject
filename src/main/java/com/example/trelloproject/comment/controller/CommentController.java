@@ -1,6 +1,7 @@
 package com.example.trelloproject.comment.controller;
 
 import com.example.trelloproject.comment.dto.CommentRequestDto;
+import com.example.trelloproject.comment.dto.CommentResponseDto;
 import com.example.trelloproject.comment.entity.Comment;
 import com.example.trelloproject.comment.service.CommentService;
 import com.example.trelloproject.global.security.UserDetailsImpl;
@@ -33,16 +34,17 @@ public class CommentController {
                 .toUri();
 
         return ResponseEntity.created(location).body(newComment);
+        // 변경해야될듯?
     }
 
     @PutMapping("/{cardsId}/comment/{commentId}")
-    public ResponseEntity<Comment> modifyComment(
+    public ResponseEntity<CommentResponseDto> modifyComment(
             @RequestBody CommentRequestDto commentRequestDto,
             @PathVariable Long cardsId,
             @PathVariable Long commentId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
-        Comment modifyComment = commentService.modifyComment(commentRequestDto, cardsId, commentId, userDetails.getUser());
-        return ResponseEntity.ok().body(modifyComment);
+        CommentResponseDto modifyCommentDto = commentService.modifyComment(commentRequestDto, cardsId, commentId, userDetails.getUser());
+        return ResponseEntity.ok().body(modifyCommentDto);
     }
 
     @DeleteMapping("/cards/{cardsId}/comment/{commentId}")

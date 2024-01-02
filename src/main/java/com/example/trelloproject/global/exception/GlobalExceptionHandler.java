@@ -30,9 +30,9 @@ public class GlobalExceptionHandler {
         return new CommonResponseDto<>(e.getMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
     }
 
-    @ExceptionHandler(NotFoundColumnException.class)
+    @ExceptionHandler(NotFoundColumnsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public CommonResponseDto<?> notFoundColumnException(NoSuchElementException e) {
+    public CommonResponseDto<?> notFoundColumnsException(NoSuchElementException e) {
         return new CommonResponseDto<>(e.getMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
     }
 
@@ -57,6 +57,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnauthorizedAccessException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResponseDto<?> unauthorizedAccessException(NoSuchElementException e) {
+        return new CommonResponseDto<>(e.getMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
+    }
+
+    @ExceptionHandler(AssigneeAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public CommonResponseDto<?> assigneeAlreadyExistsException(NoSuchElementException e) {
         return new CommonResponseDto<>(e.getMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST.value());
     }
 }

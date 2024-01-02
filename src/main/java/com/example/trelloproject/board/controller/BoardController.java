@@ -22,7 +22,9 @@ public class BoardController {
 
     //보드 생성
     @PostMapping
-    private ResponseEntity<Board> createBoard(@RequestBody BoardRequestDto requestDto, @AuthenticationPrincipal User user) {
+    private ResponseEntity<Board> createBoard(
+            @RequestBody BoardRequestDto requestDto,
+            @AuthenticationPrincipal User user) {
         Board board = boardService.createBoard(requestDto, user);
         return ResponseEntity.ok().body(board);
     }
@@ -54,7 +56,7 @@ public class BoardController {
         boardService.deleteBoard(boardId, user);
     }
 
-    //보드 초대
+    // 보드 초대
     @PostMapping("/{boardId}") ///{boardId}?user={userId}
     private ResponseEntity<Void> inviteUserToBoard(@PathVariable Long boardId, @RequestParam("user") Long userId) {
         boardService.inviteUserToBoard(boardId, userId);
@@ -62,7 +64,7 @@ public class BoardController {
     }
 
     @GetMapping("/emailcheck")
-    public ResponseEntity<Void> emailCheck (@RequestParam String email) {
+    public ResponseEntity<Void> emailCheck(@RequestParam String email) {
         boardService.inviteConfirmation(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }

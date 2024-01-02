@@ -12,16 +12,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 
 // Entity
 @Entity
-@Table(name = "cards")
 public class Card {
 
     // field
@@ -35,6 +33,9 @@ public class Card {
 
     private String writer;
 
+    @Column(name = "order_column")
+    private int order;
+
     @ManyToOne
     @JoinColumn(name = "columns_id")
     private Columns columns;
@@ -44,17 +45,13 @@ public class Card {
     @Enumerated(value = EnumType.STRING)
     private CardBackgroundColor backgroundColor;
 
-    @ManyToOne
-    @JoinColumn(name = "columns_id")
-    private com.example.trelloproject.column.entity.Column column;
-
     // 연관 관계의 주인 card -> card에서 해당 comment의 정보를 다 알 수 있어야하고
     // comment쪽에서는 몰라도 됨
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Comment> comments = new LinkedHashSet<>();
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserCard> assignees = new LinkedHashSet<>();
+    private List<UserCard> assignees = new ArrayList<>();
 
     // constructor
     @Builder
@@ -75,9 +72,8 @@ public class Card {
         this.content = cardContentModifyDto.getContent();
     }
 
-    public void addAssignee(User user){
-        UserCard userCard = new UserCard(user, this);
-        assignees.add(userCard);
+    public void addAssignees(List<UserCard> newAssignees){
+        assignees.addAll(newAssignees);
     }
 
     public void removeAssignee(User user) {
@@ -86,5 +82,9 @@ public class Card {
 
     public void changeCardColor(CardBackgroundColorModifyDto requestDto){
         this.backgroundColor = requestDto.getBackgroundColor();
+    }
+
+    public void saveOrder(int i) {
+        this.order = order+i;
     }
 }

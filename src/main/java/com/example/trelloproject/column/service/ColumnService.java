@@ -2,28 +2,34 @@ package com.example.trelloproject.column.service;
 
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.repository.BoardRepository;
-import com.example.trelloproject.column.dto.ColumnRequestDto;
+import com.example.trelloproject.column.dto.ColumnsListResponseDto;
+import com.example.trelloproject.column.dto.ColumnsRequestDto;
+import com.example.trelloproject.column.dto.ColumnsResponseDto;
 import com.example.trelloproject.column.entity.Columns;
-import com.example.trelloproject.column.repository.ColumnRepository;
+import com.example.trelloproject.column.repository.ColumnsRepository;
 import com.example.trelloproject.global.exception.NotFoundBoardException;
-import com.example.trelloproject.global.exception.NotFoundColumnException;
+import com.example.trelloproject.global.exception.NotFoundColumnsException;
+import com.example.trelloproject.global.exception.NotFoundElementException;
+import com.example.trelloproject.global.exception.UnauthorizedAccessException;
 import com.example.trelloproject.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ColumnService {
 
-    private final ColumnRepository columnRepository;
+    private final ColumnsRepository columnRepository;
     private final BoardRepository boardRepository;
     // private final ColumnRepositoryQuery columnRepositoryQuery;
 
     // 컬럼 추가
-    public Columns addColumn(Long boardsId, Long listsId, ColumnRequestDto columnDTO, User user) {
+    public ColumnsResponseDto addColumn(Long boardsId, ColumnsRequestDto columnDTO) {
         // 해당 리스트를 탐색을 할지? 게시판을 탐색을 할지?
         // 내 생각에는 리스트를 탐색을 하면 바로 boardRepository를 탐색할 이유가 없는데?
         Board board = boardRepository.findById(boardsId).orElseThrow(
@@ -31,82 +37,92 @@ public class ColumnService {
         );
 
         Columns newColumns = Columns.builder()
+                .board(board)
                 .title(columnDTO.getTitle())
                 .build();
 
         board.addColumn(newColumns);
         boardRepository.save(board);
 
-        return newColumns;
+        return new ColumnsResponseDto(newColumns);
     }
 
     // #2 feedback
     // @Transacational에 대한 사용법 알아보기
     // 컬럼 삭제
     @Transactional
-    public void deleteColumn(Long boardsId, Long listsId, User user) {
-        columnRepository.deleteById(listsId);
+    public void deleteColumn(Long boardsId, Long columnsId, User user) {
+        boardRepository.findByUserId(user.getId()).orElseThrow(
+                ()-> new UnauthorizedAccessException("해당 유저는 컬럼 삭제를 할 수 없습니다.")
+        );
+
+        columnRepository.deleteById(columnsId);
     }
 
     // 컬럼 수정
     // modified 변경
-    public Columns updateColumn(Long boardsId, Long listsId, ColumnRequestDto columnDto, User user) {
+    public ColumnsResponseDto modifyColumn(Long boardsId, Long listsId, ColumnsRequestDto columnDto, User user) {
         // 해당 게시글 찾기
         Board board = findBoard(boardsId);
         // 해당 컬럼 찾기
         Columns columns = findColumn(board, listsId);
         columns.updateTitle(columnDto);
         columnRepository.save(columns);
-        // feedback #3 : statusCode를 어디다 둬야돼?
-        return columns;
+        return new ColumnsResponseDto(columns);
     }
 
     // 컬럼 순서 변경
+    // test
     @Transactional
     public Columns changeColumnOrder(Long boardsId, Long listsId1, Long listsId2, Long commentId, User user) {
-        /*
         // 게시판 찾기
         Board board = findBoard(boardsId);
 
         // 칼럼 찾기
-        Column column1 = columnRepository.findById(listsId1).orElseThrow(
-                () -> new NotFoundElementException("칼럼 "+listsId1+"에 대한 정보를 찾을 수 없습니다.")
+        Columns column1 = columnRepository.findById(listsId1).orElseThrow(
+                () -> new NotFoundColumnsException("칼럼 "+listsId1+"에 대한 정보를 찾을 수 없습니다.")
         );
-        Column column2 = columnRepository.findById(listsId2).orElseThrow(
+        Columns column2 = columnRepository.findById(listsId2).orElseThrow(
                 () -> new NotFoundElementException("칼럼 "+listsId2+"에 대한 정보를 찾을 수 없습니다.")
         );
-
+        /*
         // 칼럼 순서 변경
-        long position1 = column1.getPosition();
-        long position2 = column2.getPosition();
+        long firstOrder = column1.getOrder();
+        long secondOrder = column2.getOrder();
 
         // 위치가 다를 때만 변경 작업 수행
-        if (position1 != position2) {
+        if (firstOrder != secondOrder) {
             // 두 위치 사이의 칼럼들을 가져옴
-            List<Column> columnsBetween = columnRepository
-                    .findByBoardAndPositionBetween(board, position1, position2);
+            List<Columns> columnsBetween = columnRepository
+                    .findByBoardAndPositionBetween(board, firstOrder, secondOrder);
 
             // position1에서 position2까지의 칼럼들을 한 칸씩 뒤로 밀음 또는 앞으로 당김
             columnsBetween.forEach(c -> {
-                if (c.getPosition() == position1) {
-                    c.setPosition(position2);
+                if (c.getOrder() == firstOrder) {
+                    c.saveOrder(secondOrder);
                 } else {
-                    c.setPosition(position1 < position2 ? c.getPosition() - 1 : c.getPosition() + 1);
+                    c.saveOrder(firstOrder < secondOrder ? c.getOrder() - 1 : c.getOrder() + 1);
                 }
             });
 
             // 변경된 칼럼들 저장
             columnRepository.saveAll(columnsBetween);
-        }
-        */
+        }*/
         return null;
     }
 
     // 모든 컬럼 조회
-    public List<Columns> getColumns(Long boardsId, Long listsId) {
+    @Transactional(readOnly = true)
+    public List<ColumnsResponseDto> getColumns(Long boardsId) {
         findBoard(boardsId);
         List<Columns> columns = columnRepository.findAll();
-        return columns;
+
+        List<ColumnsResponseDto> responseDtoList = columns.stream()
+                .map(ColumnsResponseDto::new)  // 각 컬럼을 DTO로 변환
+                .collect(Collectors.toList());
+
+        return responseDtoList;
+
     }
 
     // 게시글 찾는 메서드
@@ -125,7 +141,7 @@ public class ColumnService {
                 .filter(c -> c.getId().equals(listsId))
                 .findFirst()
                 .orElseThrow(
-                        () -> new NotFoundColumnException("해당 컬럼이 존재하지 않습니다.")
+                        () -> new NotFoundColumnsException("해당 컬럼이 존재하지 않습니다.")
                 );
         return columns;
     }

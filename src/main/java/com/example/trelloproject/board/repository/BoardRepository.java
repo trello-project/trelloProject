@@ -12,8 +12,6 @@ import java.util.Optional;
 public interface BoardRepository extends JpaRepository<Board, Long> {
     Optional<Board> findByUser(User user);
 
-    @Query("SELECT ub.user FROM UserBoard ub WHERE ub.board.id = :boardId")
-    List<User> findInvitedUsersByBoardId(@Param("boardId") Long boardId);
-
-    Optional<Board> findByColumnId(Long columnId);
+    // test
+    Optional<Board> findByUserId(Long userId);
 }

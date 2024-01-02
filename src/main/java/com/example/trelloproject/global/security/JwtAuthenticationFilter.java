@@ -1,7 +1,6 @@
 package com.example.trelloproject.global.security;
 
 import com.example.trelloproject.global.refreshToken.RefreshTokenService;
-import com.example.trelloproject.user.UserDetailsImpl;
 import com.example.trelloproject.user.dto.UserLoginDto;
 import com.example.trelloproject.user.entity.User;
 import com.example.trelloproject.user.entity.UserRoleEnum;

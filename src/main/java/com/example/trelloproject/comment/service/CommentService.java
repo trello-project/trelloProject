@@ -3,6 +3,7 @@ package com.example.trelloproject.comment.service;
 import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.card.repository.CardRepository;
 import com.example.trelloproject.comment.dto.CommentRequestDto;
+import com.example.trelloproject.comment.dto.CommentResponseDto;
 import com.example.trelloproject.comment.entity.Comment;
 import com.example.trelloproject.comment.repository.CommentRepository;
 import com.example.trelloproject.global.exception.NotFoundCardException;
@@ -34,6 +35,7 @@ public class CommentService {
         // Comment 저장
         card.addComment(newComment);
         commentRepository.save(newComment);
+
         return newComment;
     }
 
@@ -48,7 +50,7 @@ public class CommentService {
     }
 
     @Transactional
-    public Comment modifyComment(CommentRequestDto commentDto, Long cardsId, Long commentId, User loginUser) {
+    public CommentResponseDto modifyComment(CommentRequestDto commentDto, Long cardsId, Long commentId, User loginUser) {
         // 댓글 찾기
         Comment comment = findComment(commentId);
         // 댓글의 소유자와 로그인 유저가 일치 하는지?
@@ -56,7 +58,8 @@ public class CommentService {
         // 해당 댓글 Content 수정
         comment.modify(commentDto.getContent());
         commentRepository.save(comment);
-        return comment;
+
+        return new CommentResponseDto(comment);
     }
 
     private Card findCard(Long cardsId) {
