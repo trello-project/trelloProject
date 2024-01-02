@@ -1,17 +1,16 @@
 package com.example.trelloproject.board.dto;
 
 import com.example.trelloproject.board.entity.Board;
-import com.example.trelloproject.global.entity.BackgroundColor;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
-public class BoardResponseDto {
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+public class BoardResDto {
 
     private String title;
     private String content;
-    private BackgroundColor backgroundColor;
 
-    public BoardResponseDto(Board board) {
+    public BoardResDto(Board board) {
         this.title = board.getTitle();
         this.content = board.getContent();
-        this.backgroundColor =board.getBackgroundColor();
     }
 }

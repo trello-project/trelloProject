@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    Optional<Board> findByUser(User user);
+   //List<Board> findByUser(User user);
 
     // test
     Optional<Board> findByUserId(Long userId);
+
+    List<Board> findAllByUser(User user);
 }

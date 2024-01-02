@@ -1,11 +1,11 @@
-package com.example.trelloproject.card.entity;
+package com.example.trelloproject.global.entity;
 
-public enum CardBackgroundColor {
-    RED(Color.RED), GREEN(Color.GREEN), BLUE(Color.BLUE);
+public enum BackgroundColor {
+    RED(Color.RED), GREEN(Color.GREEN), BLUE(Color.BLUE), WHITE(Color.WHITE);
 
     private final String color;
 
-    CardBackgroundColor(String color) {
+    BackgroundColor(String color) {
         this.color = color;
     }
 
@@ -17,5 +17,7 @@ public enum CardBackgroundColor {
         public static final String RED = "RED";
         public static final String GREEN = "GREEN";
         public static final String BLUE = "BLUE";
+
+        public static final String WHITE = "WHITE";
     }
 }
