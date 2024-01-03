@@ -37,7 +37,6 @@ public class ColumnService {
 
         // 현재 게시판에 존재하는 컬럼의 리스트를 확인
         List<Columns> columnsList = board.getColumns();
-        System.out.println("columnsList.size() : "+columnsList.size());
         Columns newColumns = Columns.builder()
                 .board(board)
                 .order(columnsList.size()+1)
