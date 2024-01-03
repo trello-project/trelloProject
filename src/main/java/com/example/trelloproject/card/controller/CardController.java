@@ -39,7 +39,7 @@ public class CardController {
     }
 
     @DeleteMapping("/{columnsId}/cards/{cardsId}")
-    public ResponseEntity<Void> removeCard(
+    public ResponseEntity removeCard(
             @PathVariable Long columnsId,
             @PathVariable Long cardsId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -78,7 +78,7 @@ public class CardController {
     }
 
     @PostMapping("/{columnsId}/cards/{cardsId}/assignee")
-    public ResponseEntity<List<UserResponseDto>> addAssignee(
+    public ResponseEntity addAssignee(
             @PathVariable Long columnsId,
             @PathVariable Long cardsId,
             @RequestBody AddAssigneeDto addAssigneeDto,
@@ -88,7 +88,7 @@ public class CardController {
     }
 
     @DeleteMapping("/{columnsId}/cards/{cardsId}/assignee")
-    public ResponseEntity<Void> revokeAssignee(
+    public ResponseEntity revokeAssignee(
             @PathVariable Long columnsId,
             @PathVariable Long cardsId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -98,7 +98,7 @@ public class CardController {
 
     // 임시
     @PostMapping(("/{columnsId}/cards/{cardsId}/order/{newOrder}"))
-    public ResponseEntity<CardResponseDto> changeCardOrder(
+    public ResponseEntity changeCardOrder(
             @PathVariable Long columnsId,
             @PathVariable Long cardsId,
             @PathVariable Integer newOrder,

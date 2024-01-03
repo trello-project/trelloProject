@@ -48,7 +48,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{cardsId}/comment/{commentId}")
-    public ResponseEntity<Void> deleteComment(
+    public ResponseEntity deleteComment(
             @PathVariable Long cardsId,
             @PathVariable Long commentId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){

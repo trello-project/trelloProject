@@ -31,7 +31,7 @@ public class ColumnController {
     }
 
     @DeleteMapping("{boardsId}/columns/{columnsId}")
-    public ResponseEntity<Void> deleteColumn(
+    public ResponseEntity deleteColumn(
             @PathVariable Long boardsId,
             @PathVariable Long columnsId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
