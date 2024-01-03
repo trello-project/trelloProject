@@ -2,6 +2,7 @@ package com.example.trelloproject.board.entity;
 
 import com.example.trelloproject.board.dto.BoardRequestDto;
 import com.example.trelloproject.column.entity.Columns;
+import com.example.trelloproject.global.constant.Color;
 import com.example.trelloproject.global.entity.Timestamped;
 import com.example.trelloproject.user.entity.User;
 import jakarta.persistence.*;
@@ -33,11 +34,7 @@ public class Board extends Timestamped {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    private BackgroundColor backgroundColor;
-
-    private enum BackgroundColor {
-        PINK, GREEN, BLUE
-    }
+    private Color backgroundColor;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
