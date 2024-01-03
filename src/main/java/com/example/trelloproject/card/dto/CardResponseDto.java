@@ -1,8 +1,7 @@
 package com.example.trelloproject.card.dto;
 
 import com.example.trelloproject.card.entity.Card;
-import com.example.trelloproject.card.entity.CardBackgroundColor;
-import com.example.trelloproject.card.entity.UserCard;
+import com.example.trelloproject.global.constant.Color;
 import com.example.trelloproject.comment.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +16,7 @@ public class CardResponseDto {
     private String title;
     private String content;
     private String writer;
-    private CardBackgroundColor backgroundColor;
+    private Color backgroundColor;
     private List<Comment> comments;
 
     public CardResponseDto(Card card){

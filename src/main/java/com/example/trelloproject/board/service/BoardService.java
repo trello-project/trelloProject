@@ -6,21 +6,15 @@ import com.example.trelloproject.board.entity.UserBoard;
 import com.example.trelloproject.board.repository.BoardRepository;
 import com.example.trelloproject.board.repository.UserBoardRepository;
 import com.example.trelloproject.global.dto.CommonResponseDto;
-import com.example.trelloproject.global.exception.NotFoundUserException;
 import com.example.trelloproject.user.entity.User;
 import com.example.trelloproject.user.repository.UserRepository;
 import com.example.trelloproject.user.util.MailService;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -85,26 +79,23 @@ public class BoardService {
         // return new BoardResponseDto(board);
     }
 
+
     @Transactional
-    public void inviteConfirmation (String email) {
-        // userboard
-        // email같은 user찾아..
-        // 회원가입을 하고 로그인을 해 -> 보드를 만들어요?
-        // 내가 아닌 타인을 초대해야돼
-        // 내가 나를 초대하고 있어
-
-        User user = userRepository.findByEmail(email).orElse(null);
-        if(user == null){
-
-        }
-
-        // 찾았어. userBoard에서
-        UserBoard userBoard = userBoardRepository.findByUserId(user.getId()).orElseThrow(
-                ()-> new IllegalArgumentException("테스트")
+    public void inviteConfirmation(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("초대한 유저가 아닙니다.")
         );
 
-        // 여기서 찾았어
+        UserBoard userBoard = userBoardRepository.findByUserId(user.getId()).orElseThrow(
+                () -> new IllegalArgumentException("초대 수락 처리 중 에러가 발생했습니다.")
+        );
+
         userBoard.setAccepted(true);
-        userBoardRepository.save(userBoard);
+    }
+
+    public List<UserBoard> findUserBoard(User loginUser) {
+        return userBoardRepository.findAllByUser(loginUser).orElseThrow(
+                () -> new IllegalArgumentException("초대된 유저가 없습니다.")
+        );
     }
 }

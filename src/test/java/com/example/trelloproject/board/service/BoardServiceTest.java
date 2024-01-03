@@ -6,6 +6,7 @@ import com.example.trelloproject.board.repository.BoardRepository;
 import com.example.trelloproject.board.repository.UserBoardRepository;
 import com.example.trelloproject.user.entity.User;
 import com.example.trelloproject.user.repository.UserRepository;
+import com.example.trelloproject.user.util.MailService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -28,13 +29,16 @@ class BoardServiceTest {
     @Mock
     UserBoardRepository userBoardRepository;
 
+    @Mock
+    MailService mailService;
+
     @Test
     void createBoard(){
         //given
         User user = User.builder().username("User1").password("12345").build();
         BoardRequestDto requestDto = new BoardRequestDto("첫 보드","보드 테스트");
 
-        BoardService boardService = new BoardService(boardRepository,userRepository,userBoardRepository);
+        BoardService boardService = new BoardService(boardRepository,userRepository,userBoardRepository, mailService);
 
         //when
         Board board = boardService.createBoard(requestDto,user);
@@ -53,7 +57,7 @@ class BoardServiceTest {
 
         Long boardId = 1L;
 
-        BoardService boardService = new BoardService(boardRepository,userRepository,userBoardRepository);
+        BoardService boardService = new BoardService(boardRepository,userRepository,userBoardRepository, mailService);
 
         //when
 

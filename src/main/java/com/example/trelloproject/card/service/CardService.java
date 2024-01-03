@@ -1,31 +1,23 @@
 package com.example.trelloproject.card.service;
 
-import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.entity.UserBoard;
-import com.example.trelloproject.board.repository.BoardRepository;
-import com.example.trelloproject.board.repository.UserBoardRepository;
 import com.example.trelloproject.board.service.BoardService;
 import com.example.trelloproject.card.dto.*;
 import com.example.trelloproject.card.entity.Card;
-import com.example.trelloproject.card.entity.CardBackgroundColor;
-import com.example.trelloproject.card.entity.UserCard;
+import com.example.trelloproject.global.constant.Color;
 import com.example.trelloproject.card.repository.CardRepository;
-import com.example.trelloproject.card.repository.UserCardRepository;
 import com.example.trelloproject.column.entity.Columns;
 import com.example.trelloproject.column.repository.ColumnsRepository;
-import com.example.trelloproject.global.exception.*;
-import com.example.trelloproject.user.dto.UserResponseDto;
+import com.example.trelloproject.global.exception.NotFoundCardException;
+import com.example.trelloproject.global.exception.NotFoundColumnsException;
+import com.example.trelloproject.global.exception.UnauthorizedAccessException;
 import com.example.trelloproject.user.entity.User;
-import com.example.trelloproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -65,13 +57,12 @@ public class CardService{
                 .writer(loginUser.getUsername())
                 .columns(column)
                 .order(cards.size()+1)
-                .backgroundColor(CardBackgroundColor.WHITE)
+                .backgroundColor(Color.WHITE)
                 .build();
 
         // 리스트 내부에 카드를 생성할 수 있어야 합니다.
         column.addCard(newCard);
         columnsRepository.save(column);
-        cardRepository.save(newCard);
 
         return new CardResponseDto(newCard);
     }
@@ -159,14 +150,7 @@ public class CardService{
     // 잘 굴러가는지 확인해보고 싶은데...
     // 카드 협업자 추가
     @Transactional
-    public void addAssignee(
-            Long columnId, Long cardsId,
-            AddAssigneeDto addAssigneeDto,
-            User loginUser){
-        // 없어도 상관이 없다.
-        // 팀 <-> 기, 총, ...
-        // 매핑 되는 연관 관계 수정?
-
+    public void addAssignee(Long columnId, Long cardsId, AddAssigneeDto addAssigneeDto, User loginUser) {
         // 검증 로직 (1. 카드 찾기)
         Card card = findCard(cardsId);
 
@@ -178,30 +162,11 @@ public class CardService{
         for(int i = 0; i<userBoardList.size(); i++){
             if(loginUser.getId() != userBoardList.get(i).getUser().getId()){
                 asssigneeNames.add(userBoardList.get(i).getUser().getUsername());
-                card.addAssignees(asssigneeNames);
             }
         }
+        card.addAssignees(asssigneeNames);
         cardRepository.save(card);
     }
-
-    /*@Transactional
-    public void addAssignee(Long columnsId, Long cardsId, List<String> assigneeNames) {
-        Card card = findCard(cardsId);
-
-        // 중복된 협력자를 방지하기 위해 현재 할당된 협력자 목록을 가져옴
-        List<String> currentAssignees = card.getAssignees();
-
-        // 새로운 협력자 목록에서 중복된 것을 필터링
-        List<String> newAssignees = assigneeNames.stream()
-                .filter(assignee -> !currentAssignees.contains(assignee))
-                .collect(Collectors.toList());
-
-        // 중복을 방지한 협력자들을 추가
-        card.addAssignees(newAssignees);
-
-        // 변경된 카드를 저장
-        cardRepository.save(card);
-    }*/
 
 
     // 카드 협업자 추가 취소
@@ -283,7 +248,7 @@ public class CardService{
     public void validBackgroundColor(String backgroundColor) {
         // 유효성 검사 로직을 여기에 추가
         try {
-            CardBackgroundColor.valueOf(backgroundColor);
+            Color.valueOf(backgroundColor);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("유효하지 않은 배경 색상입니다.");
         }

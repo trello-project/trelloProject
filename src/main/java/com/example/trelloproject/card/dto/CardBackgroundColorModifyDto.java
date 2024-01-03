@@ -1,6 +1,6 @@
 package com.example.trelloproject.card.dto;
 
-import com.example.trelloproject.card.entity.CardBackgroundColor;
+import com.example.trelloproject.global.constant.Color;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CardBackgroundColorModifyDto {
-    private CardBackgroundColor backgroundColor;
+    private Color backgroundColor;
 
-    public CardBackgroundColor getBackgroundColor() {
+    public Color getBackgroundColor() {
         return backgroundColor;
     }
 }

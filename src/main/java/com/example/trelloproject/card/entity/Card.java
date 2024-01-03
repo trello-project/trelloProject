@@ -1,11 +1,11 @@
 package com.example.trelloproject.card.entity;
 
-import com.example.trelloproject.card.dto.AddAssigneeDto;
 import com.example.trelloproject.card.dto.CardBackgroundColorModifyDto;
 import com.example.trelloproject.card.dto.CardContentModifyDto;
 import com.example.trelloproject.card.dto.CardTitleModifyDto;
 import com.example.trelloproject.column.entity.Columns;
 import com.example.trelloproject.comment.entity.Comment;
+import com.example.trelloproject.global.constant.Color;
 import com.example.trelloproject.global.entity.Timestamped;
 import com.example.trelloproject.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -47,7 +47,7 @@ public class Card extends Timestamped {
     // 헤당 빽그라운드 컬러에 대해서 조금 생각 해보기
 
     @Enumerated(value = EnumType.STRING)
-    private CardBackgroundColor backgroundColor;
+    private Color backgroundColor;
 
     // 연관 관계의 주인 card -> card에서 해당 comment의 정보를 다 알 수 있어야하고
     // comment쪽에서는 몰라도 됨
@@ -62,7 +62,7 @@ public class Card extends Timestamped {
     // constructor
     @Builder
     public Card(String title, String content, String writer,
-                CardBackgroundColor backgroundColor, int order, Columns columns){
+                Color backgroundColor, int order, Columns columns){
         this.title = title;
         this.content = content;
         this.writer = writer;
