@@ -4,6 +4,7 @@ import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.column.dto.ColumnsRequestDto;
 import com.example.trelloproject.global.entity.Timestamped;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,14 +33,16 @@ public class Columns extends Timestamped {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "columns", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cards = new ArrayList<>();
 
     @Builder
-    public Columns(Board board, String title, List<Card> cards){
+    public Columns(Board board, String title, List<Card> cards, int order){
         this.board = board;
         this.title = title;
         this.cards = cards;
+        this.order = order;
     }
 
     public void addCard(Card newCard){
@@ -48,5 +51,14 @@ public class Columns extends Timestamped {
 
     public void updateTitle(ColumnsRequestDto columnRequestDto){
         this.title = columnRequestDto.getTitle();
+    }
+
+    public void decreaseOrder() {
+        if (order > 0) {
+            order--;
+        }
+    }
+
+    public void saveOrder(Integer newSequence) {
     }
 }

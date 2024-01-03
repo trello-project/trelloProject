@@ -7,6 +7,7 @@ import com.example.trelloproject.global.security.JwtAuthenticationFilter;
 import com.example.trelloproject.global.security.JwtAuthorizationFilter;
 import com.example.trelloproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -79,12 +80,9 @@ public class SecurityConfig {
                     .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()// resources 접근 허용 설
                     .requestMatchers("/**","/error/**").permitAll() // 메인페이지, error 페이지 접근 허용
                     .requestMatchers("/v1/users/signup", "/v1/users/login").permitAll() // 회원가입, 로그인 페이지 접근 허용
-                    // #2 : test
-                    .requestMatchers("/v1/boards").permitAll()
                     .requestMatchers("/v1/boards/emailcheck/**").permitAll()
             .anyRequest().authenticated()
         );
-
 
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

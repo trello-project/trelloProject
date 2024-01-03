@@ -7,5 +7,5 @@ public class CardRequestDto {
 
     private String title;
     private String content;
-    private String backgroundColor;
+
 }

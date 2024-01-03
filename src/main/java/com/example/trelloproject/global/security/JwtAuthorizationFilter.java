@@ -35,8 +35,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
-
         String accessTokenValue = jwtUtil.getJwtFromHeader(req);
+
         String refreshTokenValue = req.getHeader(jwtUtil.REFRESH_TOKEN_HEADER);
 
         try {
@@ -44,7 +44,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 // JWT 토큰
                 if (jwtUtil.validateToken(accessTokenValue)) {
                     Claims info = jwtUtil.getUserInfoFromToken(accessTokenValue);
-
                     setAuthentication(info.getSubject());
                 } else if (StringUtils.hasText(refreshTokenValue)) {
                     RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenValue).orElseThrow(
@@ -77,6 +76,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     public void setAuthentication(String username) {
+
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(username);
         context.setAuthentication(authentication);
@@ -85,6 +85,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private Authentication createAuthentication(String username) {
+
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }

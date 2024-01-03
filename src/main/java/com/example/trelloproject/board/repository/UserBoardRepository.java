@@ -10,6 +10,9 @@ import java.util.Optional;
 public interface UserBoardRepository extends JpaRepository<UserBoard,Long> {
     Optional<UserBoard> findByUserId(Long id);
 
+    Optional<List<UserBoard>> findAllByUser(User user);
+
+    Optional<UserBoard> findByUserIdAndBoardId(Long id, Long boardId);
     List<User> findByBoardId(Long boardId);
 
 // UserBoard findByUserId(Long id);

@@ -4,10 +4,14 @@ import com.example.trelloproject.card.dto.*;
 import com.example.trelloproject.card.entity.Card;
 import com.example.trelloproject.card.service.CardService;
 import com.example.trelloproject.global.security.UserDetailsImpl;
+import com.example.trelloproject.user.dto.UserResponseDto;
+import com.example.trelloproject.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // v1는 무조건 위에
 @RequestMapping("/v1/columns")
@@ -35,7 +39,7 @@ public class CardController {
     }
 
     @DeleteMapping("/{columnsId}/cards/{cardsId}")
-    public ResponseEntity<Void> removeCard(
+    public ResponseEntity removeCard(
             @PathVariable Long columnsId,
             @PathVariable Long cardsId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -74,17 +78,17 @@ public class CardController {
     }
 
     @PostMapping("/{columnsId}/cards/{cardsId}/assignee")
-    public ResponseEntity<Void> addAssignee(
+    public ResponseEntity addAssignee(
             @PathVariable Long columnsId,
             @PathVariable Long cardsId,
-            @RequestBody CardAssigneeListDto assigneeListDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails){
-        cardService.addAssignee(columnsId, cardsId, assigneeListDto, userDetails.getUser());
+            @RequestBody AddAssigneeDto addAssigneeDto,
+            User loginUser){
+        cardService.addAssignee(columnsId, cardsId, addAssigneeDto, loginUser);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{columnsId}/cards/{cardsId}/assignee")
-    public ResponseEntity<Void> revokeAssignee(
+    public ResponseEntity revokeAssignee(
             @PathVariable Long columnsId,
             @PathVariable Long cardsId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -94,7 +98,7 @@ public class CardController {
 
     // 임시
     @PostMapping(("/{columnsId}/cards/{cardsId}/order/{newOrder}"))
-    public ResponseEntity<CardResponseDto> changeCardOrder(
+    public ResponseEntity changeCardOrder(
             @PathVariable Long columnsId,
             @PathVariable Long cardsId,
             @PathVariable Integer newOrder,
