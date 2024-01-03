@@ -1,10 +1,11 @@
 package com.example.trelloproject.board.service;
 
-import com.example.trelloproject.board.dto.BoardRequestDto;
+import com.example.trelloproject.board.dto.*;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.entity.UserBoard;
 import com.example.trelloproject.board.repository.BoardRepository;
 import com.example.trelloproject.board.repository.UserBoardRepository;
+import com.example.trelloproject.card.dto.CardBackgroundColorModifyDto;
 import com.example.trelloproject.global.dto.CommonResponseDto;
 import com.example.trelloproject.user.entity.User;
 import com.example.trelloproject.user.repository.UserRepository;
@@ -15,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -33,15 +37,20 @@ public class BoardService {
         return board;
     }
 
-    public Board getBoard(Long boardId) {
+    public BoardColumnCardResponseDto getBoard(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 보드 입니다."));
-        return board;
+        BoardColumnCardResponseDto responseDto = new BoardColumnCardResponseDto(board);
+        return responseDto;
     }
 
-    public List<Board> getAllBoards() {
-        List<Board> boardList = boardRepository.findAll();
-        return boardList;
+    public List<BoardResDto> getMyBoards(User user) {
+        List<Board> myBoardList = boardRepository.findAllByUser(user);
+      return myBoardList.stream()
+              .map(board -> new BoardResDto(board))
+              .collect(Collectors.toList());
     }
+
+
 
     @Transactional
     public CommonResponseDto<?> updateBoard(Long boardId, BoardRequestDto requestDto, User user) {
@@ -98,4 +107,22 @@ public class BoardService {
                 () -> new IllegalArgumentException("초대된 유저가 없습니다.")
         );
     }
+
+
+    //보드 초대 멤버 확인
+    public List<User> checkBoardMembers(Long boardId) {
+        List<User> acceptedUserList = userBoardRepository.findByBoardIdAndIsAccepted(boardId,true);
+        return acceptedUserList;
+    }
+
+    //보드 배경색 수정
+    @Transactional
+    public BoardResponseDto modifyBoardColor(Long boardId, BoardBackgroundColorModifyDto boardBackgroundColorModifyDto){
+        Board board = boardRepository.findById(boardId).orElseThrow(()->new IllegalArgumentException("존재하지 않는 보드입니다."));
+        board.updateColor(boardBackgroundColorModifyDto);
+        boardRepository.save(board);
+        return new BoardResponseDto(board);
+    }
+
+
 }
