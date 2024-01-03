@@ -26,7 +26,6 @@ public class CardController {
                 @PathVariable Long columnsId,
                 @RequestBody CardRequestDto cardDto,
                 @AuthenticationPrincipal UserDetailsImpl userDetails){
-        User user = User.builder().username("test1").password("12341234").build();
             CardResponseDto cardResponseDto = cardService.addCard(cardDto, columnsId, userDetails.getUser());
             return ResponseEntity.ok().body(cardResponseDto);
     }
