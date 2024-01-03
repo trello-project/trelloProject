@@ -1,18 +1,18 @@
 package com.example.trelloproject.board.dto;
 
-import com.example.trelloproject.global.entity.BackgroundColor;
+import com.example.trelloproject.global.constant.Color;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
 public class BoardBackgroundColorModifyDto {
-    private BackgroundColor backgroundColor;
+    private Color color;
 
-    public BoardBackgroundColorModifyDto(BackgroundColor backgroundColor) {
-        this.backgroundColor = backgroundColor;
+    public BoardBackgroundColorModifyDto(Color color) {
+        this.color = color;
     }
-    public BackgroundColor getBackgroundColor() {
-        return backgroundColor;
+    public Color getColor() {
+        return color;
     }
 }
