@@ -2,6 +2,7 @@ package com.example.trelloproject.global.security;
 
 
 import com.example.trelloproject.global.entity.RefreshToken;
+import com.example.trelloproject.global.exception.CustomHandleException;
 import com.example.trelloproject.global.exception.TokenNotExistException;
 import com.example.trelloproject.global.refreshToken.RefreshTokenService;
 import com.example.trelloproject.user.entity.User;
@@ -18,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -63,19 +65,22 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     setAuthentication(user.getUsername());
                 }
             }
-        } catch (TokenNotExistException e) {
+        } catch (UsernameNotFoundException | CustomHandleException e) {
             res.setContentType("application/json; charset=UTF-8");
             res.setStatus(HttpStatus.UNAUTHORIZED.value());
             res.getWriter().write(e.getMessage());
             return;
         } catch (Exception e) {
+            res.setContentType("application/json; charset=UTF-8");
+            res.setStatus(HttpStatus.UNAUTHORIZED.value());
             log.error(e.getMessage());
+            return;
         }
 
         filterChain.doFilter(req, res);
     }
 
-    public void setAuthentication(String username) {
+    public void setAuthentication(String username) throws UsernameNotFoundException, CustomHandleException {
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(username);
@@ -84,7 +89,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         SecurityContextHolder.setContext(context);
     }
 
-    private Authentication createAuthentication(String username) {
+    private Authentication createAuthentication(String username) throws UsernameNotFoundException, CustomHandleException  {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

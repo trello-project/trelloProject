@@ -7,7 +7,6 @@ import com.example.trelloproject.global.security.JwtAuthenticationFilter;
 import com.example.trelloproject.global.security.JwtAuthorizationFilter;
 import com.example.trelloproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
 
@@ -83,6 +82,7 @@ public class SecurityConfig {
                     .requestMatchers("/v1/boards/emailcheck/**").permitAll()
             .anyRequest().authenticated()
         );
+
 
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

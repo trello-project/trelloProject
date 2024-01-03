@@ -1,5 +1,6 @@
 package com.example.trelloproject.board.service;
 
+import com.example.trelloproject.board.dto.BoardColumnCardResponseDto;
 import com.example.trelloproject.board.dto.BoardRequestDto;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.repository.BoardRepository;
@@ -38,7 +39,7 @@ class BoardServiceTest {
         User user = User.builder().username("User1").password("12345").build();
         BoardRequestDto requestDto = new BoardRequestDto("첫 보드","보드 테스트");
 
-        BoardService boardService = new BoardService(boardRepository,userRepository,userBoardRepository, mailService);
+        BoardService boardService = new BoardService(boardRepository,userRepository,userBoardRepository,mailService);
 
         //when
         Board board = boardService.createBoard(requestDto,user);
@@ -57,16 +58,16 @@ class BoardServiceTest {
 
         Long boardId = 1L;
 
-        BoardService boardService = new BoardService(boardRepository,userRepository,userBoardRepository, mailService);
+        BoardService boardService = new BoardService(boardRepository,userRepository,userBoardRepository,mailService);
 
         //when
 
         when(boardRepository.findById(boardId)).thenReturn(Optional.of(board1));
 
         // then
-        Board retrievedBoard = boardService.getBoard(boardId);
+        BoardColumnCardResponseDto retrievedBoard = boardService.getBoard(boardId);
 
-        assertEquals(user.getUsername(), retrievedBoard.getUser().getUsername());
+        assertEquals(user.getUsername(), retrievedBoard.getUserName());
         assertEquals(board1.getTitle(), retrievedBoard.getTitle());
 
     }

@@ -2,6 +2,7 @@ package com.example.trelloproject.global.security;
 
 
 import com.example.trelloproject.global.exception.BanUserException;
+import com.example.trelloproject.global.exception.CustomHandleException;
 import com.example.trelloproject.user.entity.User;
 import com.example.trelloproject.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,9 +23,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Transactional
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, BanUserException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, CustomHandleException {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("사용자 정보가 없습니다. : " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("가입된 사용자 정보가 없습니다. : " + username));
 
         if (user.getIsBanned() != null && user.getIsBanned() == true) {
             if (user.getUnbannedAt() == null) {

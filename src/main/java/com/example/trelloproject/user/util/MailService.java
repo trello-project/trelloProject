@@ -1,6 +1,7 @@
 package com.example.trelloproject.user.util;
 import com.example.trelloproject.board.entity.Board;
 import com.example.trelloproject.board.entity.UserBoard;
+import com.example.trelloproject.global.exception.CustomHandleException;
 import com.example.trelloproject.user.entity.User;
 import jakarta.mail.SendFailedException;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class MailService extends RuntimeException {
+public class MailService {
 
     private final JavaMailSender javaMailSender;
 

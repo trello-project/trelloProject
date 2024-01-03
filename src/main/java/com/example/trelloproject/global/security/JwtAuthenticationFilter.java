@@ -1,5 +1,6 @@
 package com.example.trelloproject.global.security;
 
+import com.example.trelloproject.global.exception.CustomHandleException;
 import com.example.trelloproject.global.refreshToken.RefreshTokenService;
 import com.example.trelloproject.user.dto.UserLoginDto;
 import com.example.trelloproject.user.entity.User;
@@ -92,10 +93,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setContentType("application/json; charset=UTF-8");
         response.getWriter().write("로그인에 실패하였습니다.");
         response.setStatus(401);
-//        if (failed.getCause() != null && failed.getCause().getClass().equals(GlobalCustomException.class)) {
-//            response.getWriter().write(failed.getMessage());
-//            response.setStatus(((GlobalCustomException)failed.getCause()).getStatus().value());
-//        }
+        if (failed.getCause() != null && failed.getCause().getClass().equals(CustomHandleException.class)) {
+            response.getWriter().write(failed.getMessage());
+//            response.setStatus(((CustomHandleException)failed.getCause()));
+        }
     }
 
     private void setFailInfoInUser(String username) {

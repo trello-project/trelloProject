@@ -1,0 +1,304 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "트렐로 프로젝트",
+    "description" : "트렐로 프로젝트 OpenAPI3",
+    "version" : "0.0.1"
+  },
+  "servers" : [ {
+    "url" : "http://localhost:8080"
+  } ],
+  "tags" : [ ],
+  "paths" : {
+    "/v1/boards" : {
+      "get" : {
+        "tags" : [ "보드 로직" ],
+        "summary" : "전체 조회",
+        "description" : "전체 조회",
+        "operationId" : "200_성공",
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-boards-872210689"
+                },
+                "examples" : {
+                  "200_성공" : {
+                    "value" : "{\r\n  \"message\" : \"message\",\r\n  \"data\" : [ ],\r\n  \"statusCode\" : 200\r\n}"
+                  },
+                  "200_성공3" : {
+                    "value" : "{\r\n  \"message\" : \"message\",\r\n  \"data\" : [ ],\r\n  \"statusCode\" : 200\r\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "보드 로직" ],
+        "summary" : "생성",
+        "description" : "생성",
+        "operationId" : "200_성공1",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/v1-boards1685658374"
+              },
+              "examples" : {
+                "200_성공1" : {
+                  "value" : "{\r\n  \"title\" : \"title\",\r\n  \"content\" : \"contents\"\r\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-boards-boardId1985180157"
+                },
+                "examples" : {
+                  "200_성공1" : {
+                    "value" : "{\r\n  \"createdAt\" : null,\r\n  \"modifiedAt\" : null,\r\n  \"id\" : null,\r\n  \"title\" : null,\r\n  \"content\" : null,\r\n  \"backgroundColor\" : null,\r\n  \"user\" : null,\r\n  \"columns\" : [ ],\r\n  \"invitedUsers\" : [ ]\r\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boards/{boardId}" : {
+      "get" : {
+        "tags" : [ "보드 로직" ],
+        "summary" : "조회",
+        "description" : "조회",
+        "operationId" : "200_성공2",
+        "parameters" : [ {
+          "name" : "boardId",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-boards-boardId1985180157"
+                },
+                "examples" : {
+                  "200_성공2" : {
+                    "value" : "{\r\n  \"createdAt\" : null,\r\n  \"modifiedAt\" : null,\r\n  \"id\" : null,\r\n  \"title\" : null,\r\n  \"content\" : null,\r\n  \"backgroundColor\" : null,\r\n  \"user\" : null,\r\n  \"columns\" : [ ],\r\n  \"invitedUsers\" : [ ]\r\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/users/signup" : {
+      "post" : {
+        "tags" : [ "유저 로직" ],
+        "summary" : "회원가입",
+        "description" : "회원가입",
+        "operationId" : "201_성공400_실패-유효성 검사 실패",
+        "requestBody" : {
+          "content" : {
+            "application/json;charset=UTF-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/v1-users-signup-205689228"
+              },
+              "examples" : {
+                "201_성공" : {
+                  "value" : "{\r\n  \"username\" : \"usertest1\",\r\n  \"password\" : \"testpassword\",\r\n  \"email\" : \"test@email.com\",\r\n  \"admin\" : false\r\n}"
+                },
+                "400_실패-유효성 검사 실패" : {
+                  "value" : "{\r\n  \"username\" : \"usertest1234\",\r\n  \"password\" : \"testpassword\",\r\n  \"email\" : \"test@email.com\",\r\n  \"admin\" : false\r\n}"
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "201"
+          },
+          "400" : {
+            "description" : "400",
+            "content" : {
+              "application/json;charset=UTF-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/v1-users-signup-2119066771"
+                },
+                "examples" : {
+                  "400_실패-유효성 검사 실패" : {
+                    "value" : "{\r\n  \"message\" : \"username 필드 : size must be between 4 and 10\",\r\n  \"data\" : \"2024-01-03T11:31:06.8936085\",\r\n  \"statusCode\" : 400\r\n}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "v1-users-signup-205689228" : {
+        "type" : "object",
+        "properties" : {
+          "password" : {
+            "type" : "string",
+            "description" : "패스워드"
+          },
+          "admin" : {
+            "type" : "boolean",
+            "description" : "어드민 가입 여부, 어드민 페이지만 사용 가능"
+          },
+          "email" : {
+            "type" : "string",
+            "description" : "이메일"
+          },
+          "username" : {
+            "type" : "string",
+            "description" : "계정 이름"
+          }
+        }
+      },
+      "v1-boards-872210689" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "description" : "board 목록",
+            "items" : {
+              "oneOf" : [ {
+                "type" : "object"
+              }, {
+                "type" : "boolean"
+              }, {
+                "type" : "string"
+              }, {
+                "type" : "number"
+              } ]
+            }
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "메세지"
+          },
+          "statusCode" : {
+            "type" : "number",
+            "description" : "상태 코드"
+          }
+        }
+      },
+      "v1-users-signup-2119066771" : {
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "string",
+            "description" : "현재 날짜"
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "에러 메세지"
+          },
+          "statusCode" : {
+            "type" : "number",
+            "description" : "상태코드"
+          }
+        }
+      },
+      "v1-boards-boardId1985180157" : {
+        "type" : "object",
+        "properties" : {
+          "createdAt" : {
+            "type" : "string",
+            "description" : "생성일시"
+          },
+          "backgroundColor" : {
+            "type" : "string",
+            "description" : "색상"
+          },
+          "modifiedAt" : {
+            "type" : "string",
+            "description" : "수정일시"
+          },
+          "columns" : {
+            "type" : "array",
+            "description" : "컬럼 목록",
+            "items" : {
+              "oneOf" : [ {
+                "type" : "object"
+              }, {
+                "type" : "boolean"
+              }, {
+                "type" : "string"
+              }, {
+                "type" : "number"
+              } ]
+            }
+          },
+          "id" : {
+            "type" : "number",
+            "description" : "번호"
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "제목"
+          },
+          "user" : {
+            "type" : "string",
+            "description" : "생성 유저"
+          },
+          "invitedUsers" : {
+            "type" : "array",
+            "description" : "소속된 유저 목록",
+            "items" : {
+              "oneOf" : [ {
+                "type" : "object"
+              }, {
+                "type" : "boolean"
+              }, {
+                "type" : "string"
+              }, {
+                "type" : "number"
+              } ]
+            }
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "내용"
+          }
+        }
+      },
+      "v1-boards1685658374" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "description" : "제목"
+          },
+          "content" : {
+            "type" : "string",
+            "description" : "내용"
+          }
+        }
+      }
+    }
+  }
+}
